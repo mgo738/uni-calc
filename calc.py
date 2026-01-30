@@ -1,5 +1,6 @@
 import menu_options as menu
 import tkinter as tk
+from PIL import Image, ImageTk
 
 calcWindow = tk.Tk()
 calcWindow.title("Calculator")
@@ -8,9 +9,21 @@ calcWindow.geometry("500x800")
 topLabel = tk.Label(calcWindow, text="Choose an option", font=("Arial", 24, "bold"))
 topLabel.pack(pady=10)
 
-calcButton = tk.Button(calcWindow, text="Calculator", font=("Arial", 18), width=20, height=3)
-graphButton = tk.Button(calcWindow, text="Graph", font=("Arial", 18), width=20, height=3)
-tableButton = tk.Button(calcWindow, text="Table", font=("Arial", 18), width=20, height=3)
+calcImage = Image.open("pictures/calculate-button.png")
+calcImage = calcImage.resize((400, 200))
+calcButtonImage = ImageTk.PhotoImage(calcImage)
+
+graphImage = Image.open("pictures/graph-button.png")
+graphImage = graphImage.resize((400, 200))
+graphButtonImage = ImageTk.PhotoImage(graphImage)
+
+tableImage = Image.open("pictures/table-button.png")
+tableImage = tableImage.resize((400, 200))
+tableButtonImage = ImageTk.PhotoImage(tableImage)
+
+calcButton = tk.Button(calcWindow, image=calcButtonImage, font=("Arial", 18))
+graphButton = tk.Button(calcWindow, image=graphButtonImage, font=("Arial", 18))
+tableButton = tk.Button(calcWindow, image=tableButtonImage, font=("Arial", 18))
 
 calcButton.pack(expand=True)
 graphButton.pack(expand=True)
