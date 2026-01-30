@@ -21,9 +21,9 @@ tableImage = Image.open("pictures/table-button.png")
 tableImage = tableImage.resize((400, 200))
 tableButtonImage = ImageTk.PhotoImage(tableImage)
 
-calcButton = tk.Button(calcWindow, image=calcButtonImage, font=("Arial", 18))
-graphButton = tk.Button(calcWindow, image=graphButtonImage, font=("Arial", 18))
-tableButton = tk.Button(calcWindow, image=tableButtonImage, font=("Arial", 18))
+calcButton = tk.Button(calcWindow, image=calcButtonImage, font=("Arial", 18), borderwidth=0)
+graphButton = tk.Button(calcWindow, image=graphButtonImage, font=("Arial", 18), borderwidth=0)
+tableButton = tk.Button(calcWindow, image=tableButtonImage, font=("Arial", 18), borderwidth=0)
 
 calcButton.pack(expand=True)
 graphButton.pack(expand=True)
