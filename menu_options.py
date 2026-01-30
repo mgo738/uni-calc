@@ -7,6 +7,12 @@ class MenuOptions:
         self.window = tk.Toplevel(master)
         self.window.geometry("500x800")
         self.window.resizable(False, False)
+
+        self.window.update_idletasks()
+        x = (self.window.winfo_screenwidth() // 2) - (500 // 2)
+        y = (self.window.winfo_screenheight() // 2) - (800 // 2) - 50
+        self.window.geometry(f'+{x}+{y}')
+
         self.window.withdraw()
         self.window.protocol("WM_DELETE_WINDOW", self.on_close) # AI helped me implement this initially, as I had bugs related to this specific issue.
 

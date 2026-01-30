@@ -5,9 +5,14 @@ from PIL import Image, ImageTk
 class calcMenu:
     def __init__(self):
         self.calcWindow = tk.Tk()
-        self.calcWindow.title("Calculator")
+        self.calcWindow.title("Calculator Selection Menu")
         self.calcWindow.geometry("500x800")
         self.calcWindow.resizable(False, False)
+
+        self.calcWindow.update_idletasks()
+        x = (self.calcWindow.winfo_screenwidth() // 2) - (500 // 2)
+        y = (self.calcWindow.winfo_screenheight() // 2) - (800 // 2) - 50
+        self.calcWindow.geometry(f'+{x}+{y}')
 
         self.topLabel = tk.Label(self.calcWindow, text="Choose an option", font=("Georgia", 30, "bold"))
         self.topLabel.pack(pady=10)
