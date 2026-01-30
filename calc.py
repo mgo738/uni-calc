@@ -9,28 +9,29 @@ class calcMenu:
         self.calcWindow.geometry("500x800")
         self.calcWindow.resizable(False, False)
 
-        topLabel = tk.Label(self.calcWindow, text="Choose an option", font=("Georgia", 30, "bold"))
-        topLabel.pack(pady=10)
+        self.topLabel = tk.Label(self.calcWindow, text="Choose an option", font=("Georgia", 30, "bold"))
+        self.topLabel.pack(pady=10)
 
-        calcImage = Image.open("pictures/calculate-button.png")
-        calcImage = calcImage.resize((400, 200))
-        calcButtonImage = ImageTk.PhotoImage(calcImage)
+        self.calcImage = Image.open("pictures/calculate-button.png")
+        self.calcImage = self.calcImage.resize((400, 200))
+        self.calcButtonImage = ImageTk.PhotoImage(self.calcImage)
 
-        graphImage = Image.open("pictures/graph-button.png")
-        graphImage = graphImage.resize((400, 200))
-        graphButtonImage = ImageTk.PhotoImage(graphImage)
+        self.graphImage = Image.open("pictures/graph-button.png")
+        self.graphImage = self.graphImage.resize((400, 200))
+        self.graphButtonImage = ImageTk.PhotoImage(self.graphImage)
 
-        tableImage = Image.open("pictures/table-button.png")
-        tableImage = tableImage.resize((400, 200))
-        tableButtonImage = ImageTk.PhotoImage(tableImage)
+        self.tableImage = Image.open("pictures/table-button.png")
+        self.tableImage = self.tableImage.resize((400, 200))
+        self.tableButtonImage = ImageTk.PhotoImage(self.tableImage)
 
-        calcButton = tk.Button(self.calcWindow, image=calcButtonImage, font=("Arial", 18), borderwidth=0)
-        graphButton = tk.Button(self.calcWindow, image=graphButtonImage, font=("Arial", 18), borderwidth=0)
-        tableButton = tk.Button(self.calcWindow, image=tableButtonImage, font=("Arial", 18), borderwidth=0)
+        menu.menuOptions = menu.MenuOptions(self.calcWindow, self)
+        self.calcButton = tk.Button(self.calcWindow, image=self.calcButtonImage, font=("Arial", 18), borderwidth=0, command=menu.menuOptions.calculator)
+        self.graphButton = tk.Button(self.calcWindow, image=self.graphButtonImage, font=("Arial", 18), borderwidth=0, command=menu.menuOptions.graph)
+        self.tableButton = tk.Button(self.calcWindow, image=self.tableButtonImage, font=("Arial", 18), borderwidth=0, command=menu.menuOptions.table)
 
-        calcButton.pack(expand=True)
-        graphButton.pack(expand=True)
-        tableButton.pack(expand=True)
+        self.calcButton.pack(expand=True)
+        self.graphButton.pack(expand=True)
+        self.tableButton.pack(expand=True)
 
         self.calcWindow.mainloop()
     
@@ -40,4 +41,5 @@ class calcMenu:
     def getCalcWindow(self):
         self.calcWindow.wm_deiconify()
 
-calculator = calcMenu()
+if __name__ == "__main__":
+    calculator = calcMenu()
