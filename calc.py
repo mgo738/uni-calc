@@ -5,6 +5,7 @@ from PIL import Image, ImageTk
 calcWindow = tk.Tk()
 calcWindow.title("Calculator")
 calcWindow.geometry("500x800")
+calcWindow.resizable(False, False)
 
 topLabel = tk.Label(calcWindow, text="Choose an option", font=("Georgia", 30, "bold"))
 topLabel.pack(pady=10)
