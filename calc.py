@@ -25,9 +25,9 @@ class calcMenu:
         self.tableButtonImage = ImageTk.PhotoImage(self.tableImage)
 
         menu.menuOptions = menu.MenuOptions(self.calcWindow, self)
-        self.calcButton = tk.Button(self.calcWindow, image=self.calcButtonImage, font=("Arial", 18), borderwidth=0, command=menu.menuOptions.calculator)
-        self.graphButton = tk.Button(self.calcWindow, image=self.graphButtonImage, font=("Arial", 18), borderwidth=0, command=menu.menuOptions.graph)
-        self.tableButton = tk.Button(self.calcWindow, image=self.tableButtonImage, font=("Arial", 18), borderwidth=0, command=menu.menuOptions.table)
+        self.calcButton = tk.Button(self.calcWindow, image=self.calcButtonImage, borderwidth=0, command=menu.menuOptions.calculator)
+        self.graphButton = tk.Button(self.calcWindow, image=self.graphButtonImage, borderwidth=0, command=menu.menuOptions.graph)
+        self.tableButton = tk.Button(self.calcWindow, image=self.tableButtonImage, borderwidth=0, command=menu.menuOptions.table)
 
         self.calcButton.pack(expand=True)
         self.graphButton.pack(expand=True)
@@ -37,9 +37,6 @@ class calcMenu:
     
     def closeCalcMenu(self):
         self.calcWindow.withdraw()
-
-    def getCalcWindow(self):
-        self.calcWindow.wm_deiconify()
 
 if __name__ == "__main__":
     calculator = calcMenu()

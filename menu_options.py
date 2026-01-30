@@ -1,4 +1,5 @@
 import tkinter as tk
+from PIL import Image, ImageTk
 
 
 class MenuOptions:
@@ -8,6 +9,13 @@ class MenuOptions:
         self.window.resizable(False, False)
         self.window.withdraw()
         self.window.protocol("WM_DELETE_WINDOW", self.on_close) # AI helped me implement this initially, as I had bugs related to this specific issue.
+
+        homeImage = Image.open("pictures/home-icon.jpg")
+        homeImage = homeImage.resize((50, 50))
+        self.homeButtonImage = ImageTk.PhotoImage(homeImage)
+
+        homeButton = tk.Button(self.window, image=self.homeButtonImage, borderwidth=0, command=self.home)
+        homeButton.pack(anchor="nw", pady=10, padx=10)
 
         self.master = master
         self.calc = calc
@@ -36,3 +44,7 @@ class MenuOptions:
             self.window.destroy()
         except Exception:
             pass
+
+    def home(self):
+        self.window.withdraw()
+        self.calc.calcWindow.wm_deiconify()
