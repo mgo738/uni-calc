@@ -6,7 +6,7 @@ calcWindow = tk.Tk()
 calcWindow.title("Calculator")
 calcWindow.geometry("500x800")
 
-topLabel = tk.Label(calcWindow, text="Choose an option", font=("Arial", 24, "bold"))
+topLabel = tk.Label(calcWindow, text="Choose an option", font=("Georgia", 30, "bold"))
 topLabel.pack(pady=10)
 
 calcImage = Image.open("pictures/calculate-button.png")
