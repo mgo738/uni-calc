@@ -8,6 +8,7 @@ class calculator():
         self.window = tk.Toplevel(self.master)
         self.window.geometry("500x800")
         self.window.resizable(False, False)
+        self.window.title("Calculator")
 
         self.window.update_idletasks()
         x = (self.window.winfo_screenwidth() // 2) - (500 // 2)
