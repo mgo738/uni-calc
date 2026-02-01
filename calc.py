@@ -1,4 +1,3 @@
-import menu_options as menu
 import tkinter as tk
 from PIL import Image, ImageTk
 import calculate, graphs, table
