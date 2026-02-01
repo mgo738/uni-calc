@@ -11,7 +11,7 @@ class calcMenu:
 
         self.calcWindow.update_idletasks()
         x = (self.calcWindow.winfo_screenwidth() // 2) - (500 // 2)
-        y = (self.calcWindow.winfo_screenheight() // 2) - (800 // 2) - 50
+        y = (self.calcWindow.winfo_screenheight() // 2) - (800 // 2)
         self.calcWindow.geometry(f'+{x}+{y}')
 
         self.topLabel = tk.Label(self.calcWindow, text="Choose an option", font=("Georgia", 30, "bold"))
@@ -32,9 +32,9 @@ class calcMenu:
         self.calculator = calculate.calculator(self.calcWindow)
         self.graphing = graphs.graphing(self.calcWindow)
         self.tables = table.tables(self.calcWindow)
-        self.calcButton = tk.Button(self.calcWindow, image=self.calcButtonImage, borderwidth=0, command=self.calculator.show)
-        self.graphButton = tk.Button(self.calcWindow, image=self.graphButtonImage, borderwidth=0, command=self.graphing.show)
-        self.tableButton = tk.Button(self.calcWindow, image=self.tableButtonImage, borderwidth=0, command=self.tables.show)
+        self.calcButton = tk.Button(self.calcWindow, image=self.calcButtonImage, borderwidth=0, command=lambda: [self.calculator.show(), self.closeCalcMenu()])
+        self.graphButton = tk.Button(self.calcWindow, image=self.graphButtonImage, borderwidth=0, command=lambda: [self.graphing.show(), self.closeCalcMenu()])
+        self.tableButton = tk.Button(self.calcWindow, image=self.tableButtonImage, borderwidth=0, command=lambda: [self.tables.show(), self.closeCalcMenu()])
 
         self.calcButton.pack(expand=True)
         self.graphButton.pack(expand=True)

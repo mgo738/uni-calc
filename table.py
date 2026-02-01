@@ -9,6 +9,8 @@ class tables():
         self.window.geometry("500x800")
         self.window.resizable(False, False)
         self.window.title("Table and Statistics")
+        
+        self.window.protocol("WM_DELETE_WINDOW", self.master.destroy)
 
         self.window.update_idletasks()
         x = (self.window.winfo_screenwidth() // 2) - (500 // 2)
