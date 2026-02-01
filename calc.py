@@ -1,6 +1,7 @@
 import menu_options as menu
 import tkinter as tk
 from PIL import Image, ImageTk
+import calculate, graphs, table
 
 class calcMenu:
     def __init__(self):
@@ -29,10 +30,12 @@ class calcMenu:
         self.tableImage = self.tableImage.resize((400, 200))
         self.tableButtonImage = ImageTk.PhotoImage(self.tableImage)
 
-        menu.menuOptions = menu.MenuOptions(self.calcWindow, self)
-        self.calcButton = tk.Button(self.calcWindow, image=self.calcButtonImage, borderwidth=0, command=menu.menuOptions.calculator)
-        self.graphButton = tk.Button(self.calcWindow, image=self.graphButtonImage, borderwidth=0, command=menu.menuOptions.graph)
-        self.tableButton = tk.Button(self.calcWindow, image=self.tableButtonImage, borderwidth=0, command=menu.menuOptions.table)
+        self.calculator = calculate.calculator(self.calcWindow)
+        self.graphing = graphs.graphing(self.calcWindow)
+        self.tables = table.tables(self.calcWindow)
+        self.calcButton = tk.Button(self.calcWindow, image=self.calcButtonImage, borderwidth=0, command=self.calculator.show)
+        self.graphButton = tk.Button(self.calcWindow, image=self.graphButtonImage, borderwidth=0, command=self.graphing.show)
+        self.tableButton = tk.Button(self.calcWindow, image=self.tableButtonImage, borderwidth=0, command=self.tables.show)
 
         self.calcButton.pack(expand=True)
         self.graphButton.pack(expand=True)
