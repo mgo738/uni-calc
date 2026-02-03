@@ -5,5 +5,4 @@ class Tables():
         self.master = master
 
     def show(self):
-        self.label = tk.Label(self.master, text="Table Screen")
-        self.label.pack()
+        self.master.title("Table and Statistics")

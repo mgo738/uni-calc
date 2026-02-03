@@ -5,5 +5,6 @@ class Calculator():
         self.master = master
 
     def show(self):
-        self.label = tk.Label(self.master, text="Calculator Screen")
-        self.label.pack()
+        self.master.title("Calculator Screen")
+
+        

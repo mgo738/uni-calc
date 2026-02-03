@@ -5,5 +5,4 @@ class Graphing():
         self.master = master
 
     def show(self):
-        self.label = tk.Label(self.master, text="Graph Screen")
-        self.label.pack()
+        self.master.title("Graphing tool")
