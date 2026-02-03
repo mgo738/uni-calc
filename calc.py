@@ -27,6 +27,7 @@ class CalcMenu:
         self.calc_window.geometry("500x800")
         self.calc_window.resizable(False, False)
 
+        # Centering the window on the screen.
         self.calc_window.update_idletasks()
         x = (self.calc_window.winfo_screenwidth() // 2) - (500 // 2)
         y = (self.calc_window.winfo_screenheight() // 2) - (800 // 2)
@@ -61,8 +62,11 @@ class CalcMenu:
         self.window.geometry("500x800")
         self.window.resizable(False, False)
 
+        # Protocol for the newly opened window.
+        # When user closes the window using the 'x' button on window, it goes back to the selection menu.
         self.window.protocol("WM_DELETE_WINDOW", self.go_home)
 
+        # Center the window on the screen.
         self.window.update_idletasks()
         x = (self.window.winfo_screenwidth() // 2) - (500 // 2)
         y = (self.window.winfo_screenheight() // 2) - (800 // 2)

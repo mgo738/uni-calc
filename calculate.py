@@ -14,6 +14,8 @@ class Calculator():
         self.calc_text_label = tk.Label(self.text_frame, text="Calculator Display",
                                        font=("Georgia", 24), bg="white")
         
+        # Stop the frames from shrinking to the size of children widgets.
+        # This fixes issue with label not being packed/anchored properly.
         self.text_frame.grid_propagate(False)
         self.button_frame.grid_propagate(False)
 
