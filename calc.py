@@ -11,12 +11,14 @@ class CalcMenu:
         self.calc_image = Image.open("pictures/calculate-button.png")
         self.calc_image = self.calc_image.resize((400, 200))
         
-
         self.graph_image = Image.open("pictures/graph-button.png")
         self.graph_image = self.graph_image.resize((400, 200))
         
         self.table_image = Image.open("pictures/table-button.png")
         self.table_image = self.table_image.resize((400, 200))
+
+        self.home_image = Image.open("pictures/home-icon.jpg")
+        self.home_image = self.home_image.resize((50, 50))
 
 
     def start(self):
@@ -39,11 +41,12 @@ class CalcMenu:
         self.top_label.pack(pady=10)
 
         self.calc_button = tk.Button(self.calc_window, image=self.calc_button_image, borderwidth=0,
-                                    command=lambda: [self.close_calc_menu(), self.button_commands("calculate")])
+                                    command=lambda: self.button_commands("calculate"))
         self.graph_button = tk.Button(self.calc_window, image=self.graph_button_image, borderwidth=0,
-                                     command=lambda: [self.close_calc_menu(), self.button_commands("graph")])
+                                     command=lambda: self.button_commands("graph"))
         self.table_button = tk.Button(self.calc_window, image=self.table_button_image, borderwidth=0,
-                                     command=lambda: [self.close_calc_menu(), self.button_commands("table")])
+                                     command=lambda: self.button_commands("table"))
+        
         
         self.calc_button.pack(expand=True)
         self.graph_button.pack(expand=True)
@@ -52,25 +55,28 @@ class CalcMenu:
         self.calc_window.mainloop()
     
 
-    def close_calc_menu(self):
-        self.calc_window.withdraw()
-
-
     def create_window(self):
         self.window = tk.Toplevel(self.calc_window)
         self.window.title("Calculator Selection Menu")
         self.window.geometry("500x800")
         self.window.resizable(False, False)
 
-        self.window.protocol("WM_DELETE_WINDOW", self.calc_window.destroy)
+        self.window.protocol("WM_DELETE_WINDOW", self.go_home)
 
         self.window.update_idletasks()
         x = (self.window.winfo_screenwidth() // 2) - (500 // 2)
         y = (self.window.winfo_screenheight() // 2) - (800 // 2)
         self.window.geometry(f'+{x}+{y}')
+
+        self.home_button_image = ImageTk.PhotoImage(self.home_image)
+        self.home_button = tk.Button(self.window, image=self.home_button_image, borderwidth=0,
+                                    command=self.go_home)
+        self.home_button.pack(anchor="nw", pady=10, padx=10)
     
-    
+
     def button_commands(self, screen):
+        self.calc_window.withdraw()
+
         self.create_window()
         self.calculator = calculate.Calculator(self.window)
         self.graphing = graphs.Graphing(self.window)
@@ -82,6 +88,11 @@ class CalcMenu:
             self.graphing.show()
         elif screen == "table":
             self.tables.show()
+
+    
+    def go_home(self):
+        self.window.destroy()
+        self.calc_window.wm_deiconify()
 
 
 if __name__ == "__main__":
