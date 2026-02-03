@@ -8,51 +8,53 @@ import table
 
 class CalcMenu:
     def __init__(self):
-        self.calcWindow = tk.Tk()
-        self.calcWindow.title("Calculator Selection Menu")
-        self.calcWindow.geometry("500x800")
-        self.calcWindow.resizable(False, False)
+        self.calc_window = tk.Tk()
+        self.calc_window.title("Calculator Selection Menu")
+        self.calc_window.geometry("500x800")
+        self.calc_window.resizable(False, False)
 
-        self.calcWindow.update_idletasks()
-        x = (self.calcWindow.winfo_screenwidth() // 2) - (500 // 2)
-        y = (self.calcWindow.winfo_screenheight() // 2) - (800 // 2)
-        self.calcWindow.geometry(f'+{x}+{y}')
+        self.calc_window.update_idletasks()
+        x = (self.calc_window.winfo_screenwidth() // 2) - (500 // 2)
+        y = (self.calc_window.winfo_screenheight() // 2) - (800 // 2)
+        self.calc_window.geometry(f'+{x}+{y}')
 
-        self.topLabel = tk.Label(self.calcWindow, text="Choose an option",
+        self.top_label = tk.Label(self.calc_window, text="Choose an option",
                                  font=("Georgia", 30, "bold"))
-        self.topLabel.pack(pady=10)
+        self.top_label.pack(pady=10)
 
-        self.calcImage = Image.open("pictures/calculate-button.png")
-        self.calcImage = self.calcImage.resize((400, 200))
-        self.calcButtonImage = ImageTk.PhotoImage(self.calcImage)
+        self.calc_image = Image.open("pictures/calculate-button.png")
+        self.calc_image = self.calc_image.resize((400, 200))
+        self.calc_button_image = ImageTk.PhotoImage(self.calc_image)
 
-        self.graphImage = Image.open("pictures/graph-button.png")
-        self.graphImage = self.graphImage.resize((400, 200))
-        self.graphButtonImage = ImageTk.PhotoImage(self.graphImage)
+        self.graph_image = Image.open("pictures/graph-button.png")
+        self.graph_image = self.graph_image.resize((400, 200))
+        self.graph_button_image = ImageTk.PhotoImage(self.graph_image)
+        self.graph_image = self.graph_image.resize((400, 200))
+        self.graph_button_image = ImageTk.PhotoImage(self.graph_image)
 
-        self.tableImage = Image.open("pictures/table-button.png")
-        self.tableImage = self.tableImage.resize((400, 200))
-        self.tableButtonImage = ImageTk.PhotoImage(self.tableImage)
+        self.table_image = Image.open("pictures/table-button.png")
+        self.table_image = self.table_image.resize((400, 200))
+        self.table_button_image = ImageTk.PhotoImage(self.table_image)
 
-        self.calculator = calculate.Calculator(self.calcWindow)
-        self.graphing = graphs.Graphing(self.calcWindow)
-        self.tables = table.Tables(self.calcWindow)
-        self.calcButton = tk.Button(self.calcWindow, image=self.calcButtonImage, borderwidth=0,
-                                    command=lambda: [self.calculator.show(), self.closeCalcMenu()])
-        self.graphButton = tk.Button(self.calcWindow, image=self.graphButtonImage, borderwidth=0,
-                                     command=lambda: [self.graphing.show(), self.closeCalcMenu()])
-        self.tableButton = tk.Button(self.calcWindow, image=self.tableButtonImage, borderwidth=0,
-                                     command=lambda: [self.tables.show(), self.closeCalcMenu()])
+        self.calculator = calculate.Calculator(self.calc_window)
+        self.graphing = graphs.Graphing(self.calc_window)
+        self.tables = table.Tables(self.calc_window)
+        self.calc_button = tk.Button(self.calc_window, image=self.calc_button_image, borderwidth=0,
+                                    command=lambda: [self.calculator.show(), self.close_calc_menu()])
+        self.graph_button = tk.Button(self.calc_window, image=self.graph_button_image, borderwidth=0,
+                                     command=lambda: [self.graphing.show(), self.close_calc_menu()])
+        self.table_button = tk.Button(self.calc_window, image=self.table_button_image, borderwidth=0,
+                                     command=lambda: [self.tables.show(), self.close_calc_menu()])
 
-        self.calcButton.pack(expand=True)
-        self.graphButton.pack(expand=True)
-        self.tableButton.pack(expand=True)
+        self.calc_button.pack(expand=True)
+        self.graph_button.pack(expand=True)
+        self.table_button.pack(expand=True)
 
-        self.calcWindow.mainloop()
+        self.calc_window.mainloop()
     
 
-    def closeCalcMenu(self):
-        self.calcWindow.withdraw()
+    def close_calc_menu(self):
+        self.calc_window.withdraw()
 
 
 if __name__ == "__main__":
