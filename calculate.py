@@ -1,6 +1,6 @@
 import tkinter as tk
 
-class calculator():
+class Calculator():
     def __init__(self, master):
         self.master = master
 

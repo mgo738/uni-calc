@@ -1,6 +1,6 @@
 import tkinter as tk
 
-class tables():
+class Tables():
     def __init__(self, master):
         self.master = master
 

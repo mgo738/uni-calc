@@ -1,6 +1,6 @@
 import tkinter as tk
 
-class graphing():
+class Graphing():
     def __init__(self, master):
         self.master = master
 
