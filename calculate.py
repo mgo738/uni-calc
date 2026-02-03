@@ -6,5 +6,4 @@ class Calculator():
 
     def show(self):
         self.master.title("Calculator Screen")
-
         

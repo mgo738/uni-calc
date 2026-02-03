@@ -17,7 +17,7 @@ class CalcMenu:
         self.table_image = Image.open("pictures/table-button.png")
         self.table_image = self.table_image.resize((400, 200))
 
-        self.home_image = Image.open("pictures/home-icon.jpg")
+        self.home_image = Image.open("pictures/home-icon.png")
         self.home_image = self.home_image.resize((50, 50))
 
 
@@ -68,10 +68,18 @@ class CalcMenu:
         y = (self.window.winfo_screenheight() // 2) - (800 // 2)
         self.window.geometry(f'+{x}+{y}')
 
+        self.canvas = tk.Canvas(self.window, width=500, height=70, bg="#aaaaaa",
+                                borderwidth=0, highlightthickness=0)
+
         self.home_button_image = ImageTk.PhotoImage(self.home_image)
         self.home_button = tk.Button(self.window, image=self.home_button_image, borderwidth=0,
-                                    command=self.go_home)
-        self.home_button.pack(anchor="nw", pady=10, padx=10)
+                                    command=self.go_home, background="#aaaaaa", activebackground="#aaaaaa")
+        self.title_label = tk.Label(self.window, text="Title",
+                                    font=("Georgia", 24, "bold"), bg="#aaaaaa")
+        
+        self.home_button.grid(row=0, column=0, sticky="nw", padx=10, pady=10)
+        self.canvas.grid(row=0, column=0, columnspan=4)
+        self.title_label.place(relx=0.5, y=35, anchor="center")
     
 
     def button_commands(self, screen):
@@ -83,10 +91,13 @@ class CalcMenu:
         self.tables = table.Tables(self.window)
 
         if screen == "calculate":
+            self.title_label.config(text="Calculator")
             self.calculator.show()
         elif screen == "graph":
+            self.title_label.config(text="Graphing Tool")
             self.graphing.show()
         elif screen == "table":
+            self.title_label.config(text="Table and Statistics")
             self.tables.show()
 
     
