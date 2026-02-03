@@ -72,14 +72,15 @@ class CalcMenu:
         y = (self.window.winfo_screenheight() // 2) - (800 // 2)
         self.window.geometry(f'+{x}+{y}')
 
-        self.canvas = tk.Canvas(self.window, width=500, height=70, bg="#aaaaaa",
+        self.canvas_bg = "#aaaaaa"
+        self.canvas = tk.Canvas(self.window, width=500, height=70, bg=self.canvas_bg,
                                 borderwidth=0, highlightthickness=0)
 
         self.home_button_image = ImageTk.PhotoImage(self.home_image)
         self.home_button = tk.Button(self.window, image=self.home_button_image, borderwidth=0,
-                                    command=self.go_home, background="#aaaaaa", activebackground="#aaaaaa")
+                                    command=self.go_home, background=self.canvas_bg, activebackground=self.canvas_bg)
         self.title_label = tk.Label(self.window, text="Title",
-                                    font=("Georgia", 24, "bold"), bg="#aaaaaa")
+                                    font=("Georgia", 28, "bold"), bg=self.canvas_bg)
         
         self.home_button.grid(row=0, column=0, sticky="nw", padx=10, pady=10)
         self.canvas.grid(row=0, column=0, columnspan=4)
@@ -96,13 +97,20 @@ class CalcMenu:
 
         if screen == "calculate":
             self.title_label.config(text="Calculator")
+            self.canvas_bg = "#ec5858"
             self.calculator.show()
         elif screen == "graph":
             self.title_label.config(text="Graphing Tool")
+            self.canvas_bg = "#5898ec"
             self.graphing.show()
         elif screen == "table":
             self.title_label.config(text="Table and Statistics")
+            self.canvas_bg = "#5eee5e"
             self.tables.show()
+        
+        self.canvas.config(bg=self.canvas_bg)
+        self.home_button.config(bg=self.canvas_bg, activebackground=self.canvas_bg)
+        self.title_label.config(bg=self.canvas_bg)
 
     
     def go_home(self):

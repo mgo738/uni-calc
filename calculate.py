@@ -6,7 +6,7 @@ class Calculator():
 
     def show(self):
         self.master.title("Calculator Screen")
-        self.frame_bg = "#999999"
+        self.frame_bg = "#aaaaaa"
 
         self.text_frame = tk.Frame(self.master, width=500, height=280, bg="white",
                                    borderwidth=0, highlightthickness=0)
@@ -103,5 +103,4 @@ class Calculator():
         self.button_decimal.grid(row=4, column=2, sticky="nsew")
         self.button_equals.grid(row=4, column=3, sticky="nsew")
 
-
-        self.calc_text_label.pack(side="bottom", anchor="w", padx=26, pady=26)
+        self.calc_text_label.pack(side="bottom", anchor="w", padx=10, pady=10)
