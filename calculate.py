@@ -15,6 +15,8 @@ class Calculator():
 
         self.calc_text_label = tk.Label(self.text_frame, text="",
                                        font=("Georgia", 24), bg="white")
+        self.answer_text_label = tk.Label(self.text_frame, text="",
+                                         font=("Georgia", 24), bg="white")
         
         # Number buttons
         self.button_0 = tk.Button(self.button_frame, text="0", font=("Georgia", 26), 
@@ -123,7 +125,8 @@ class Calculator():
         self.button_decimal.grid(row=4, column=2, sticky="nsew")
         self.button_equals.grid(row=4, column=3, sticky="nsew")
 
-        self.calc_text_label.pack(side="bottom", anchor="w", padx=10, pady=10)
+        self.calc_text_label.pack(side="left", anchor="s", padx=10, pady=10)
+        self.answer_text_label.pack(side="right", anchor="s", padx=10, pady=10)
     
     def button_functions(self, button):
         button_text = button.cget("text")
@@ -158,6 +161,6 @@ class Calculator():
 
                 expression = current_text.replace("x", "*").replace("÷", "/")
                 result = eval(expression)
-                self.calc_text_label.config(text=str(result))
+                self.answer_text_label.config(text=str(result))
             except Exception:
-                self.calc_text_label.config(text="Error")
+                self.answer_text_label.config(text="Error")
