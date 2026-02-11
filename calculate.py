@@ -151,8 +151,8 @@ class Calculator():
                 duplicates = True
                 
                 while duplicates:
-                    if "++" in current_text or "--" in current_text or "**" in current_text or "//" in current_text:
-                        current_text = current_text.replace("++", "+").replace("--", "-").replace("**", "*").replace("//", "/")
+                    if "++" in current_text or "--" in current_text or "xx" in current_text or "÷÷" in current_text:
+                        current_text = current_text.replace("++", "+").replace("--", "-").replace("xx", "x").replace("÷÷", "÷")
                     else:
                         duplicates = False
 
