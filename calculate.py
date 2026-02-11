@@ -231,7 +231,6 @@ class Calculator():
                         self.last_pressed_equals = False
                 else:
                     self.calc_text_label.config(text=current_text + button_text)
-
         elif button_text == "C":
             self.calc_text_label.config(text="")
             self.last_pressed_equals = False
@@ -251,21 +250,25 @@ class Calculator():
             self.more_button_frame.grid_forget()
             self.button_frame.grid(row=2, column=0, sticky="nsew")
         elif button_text == "=":
-            try:
-                duplicates = True
-                self.last_pressed_equals = True
-                
-                while duplicates:
-                    if "++" in current_text or "--" in current_text or "xx" in current_text or "÷÷" in current_text:
-                        current_text = current_text.replace("++", "+").replace("--", "-").replace("xx", "x").replace("÷÷", "÷")
-                    else:
-                        duplicates = False
+            self.do_equals()
 
-                expression = current_text.replace("x", "*").replace("÷", "/")
-                result = eval(expression)
 
-                self.answer_text_label.config(text=str(result))
-            except Exception:
-                self.last_pressed_equals = True
-                self.answer_text_label.config(text="Error")                   
+    def do_equals(self):
+        current_text = self.calc_text_label.cget("text")
+        try:
+            duplicates = True
+            self.last_pressed_equals = True
             
+            while duplicates:
+                if "++" in current_text or "--" in current_text or "xx" in current_text or "÷÷" in current_text:
+                    current_text = current_text.replace("++", "+").replace("--", "-").replace("xx", "x").replace("÷÷", "÷")
+                else:
+                    duplicates = False
+
+            expression = current_text.replace("x", "*").replace("÷", "/")
+            result = eval(expression)
+
+            self.answer_text_label.config(text=str(result))
+        except Exception:
+            self.last_pressed_equals = True
+            self.answer_text_label.config(text="Error")
