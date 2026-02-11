@@ -13,52 +13,72 @@ class Calculator():
         self.button_frame = tk.Frame(self.master, width=500, height=450, bg=self.frame_bg,
                                      borderwidth=0, highlightthickness=0)
 
-        self.calc_text_label = tk.Label(self.text_frame, text="Calculator Display",
+        self.calc_text_label = tk.Label(self.text_frame, text="",
                                        font=("Georgia", 24), bg="white")
         
         # Number buttons
         self.button_0 = tk.Button(self.button_frame, text="0", font=("Georgia", 26), 
-                                  borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                  borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                  command=lambda: self.button_functions(self.button_0))
         self.button_1 = tk.Button(self.button_frame, text="1", font=("Georgia", 26), 
-                                  borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                  borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                  command=lambda: self.button_functions(self.button_1))
         self.button_2 = tk.Button(self.button_frame, text="2", font=("Georgia", 26), 
-                                  borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                  borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                  command=lambda: self.button_functions(self.button_2))
         self.button_3 = tk.Button(self.button_frame, text="3", font=("Georgia", 26), 
-                                  borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                  borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                  command=lambda: self.button_functions(self.button_3))
         self.button_4 = tk.Button(self.button_frame, text="4", font=("Georgia", 26), 
-                                  borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                  borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                  command=lambda: self.button_functions(self.button_4))
         self.button_5 = tk.Button(self.button_frame, text="5", font=("Georgia", 26), 
-                                  borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                  borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                  command=lambda: self.button_functions(self.button_5))
         self.button_6 = tk.Button(self.button_frame, text="6", font=("Georgia", 26), 
-                                  borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                  borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                  command=lambda: self.button_functions(self.button_6))
         self.button_7 = tk.Button(self.button_frame, text="7", font=("Georgia", 26), 
-                                  borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                  borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                  command=lambda: self.button_functions(self.button_7))
         self.button_8 = tk.Button(self.button_frame, text="8", font=("Georgia", 26), 
-                                  borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                  borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                  command=lambda: self.button_functions(self.button_8))
         self.button_9 = tk.Button(self.button_frame, text="9", font=("Georgia", 26), 
-                                  borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                  borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                  command=lambda: self.button_functions(self.button_9))
 
         # Operator/other buttons
         self.button_plus = tk.Button(self.button_frame, text="+", font=("Georgia", 26), 
-                                     borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                     borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                     command=lambda: self.button_functions(self.button_plus))
         self.button_minus = tk.Button(self.button_frame, text="-", font=("Georgia", 26), 
-                                      borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                      borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                      command=lambda: self.button_functions(self.button_minus))
         self.button_multiply = tk.Button(self.button_frame, text="x", font=("Georgia", 26), 
-                                         borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                         borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                         command=lambda: self.button_functions(self.button_multiply))
         self.button_divide = tk.Button(self.button_frame, text="÷", font=("Georgia", 26), 
-                                       borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                       borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                       command=lambda: self.button_functions(self.button_divide))
         self.button_equals = tk.Button(self.button_frame, text="=", font=("Georgia", 26), 
-                                       borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                       borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                       command=lambda: self.button_functions(self.button_equals))
         self.button_backspace = tk.Button(self.button_frame, text="⌫", font=("Georgia", 26), 
-                                          borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                          borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                          command=lambda: self.button_functions(self.button_backspace))
         self.button_clear = tk.Button(self.button_frame, text="C", font=("Georgia", 26), 
-                                      borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                      borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                      command=lambda: self.button_functions(self.button_clear))
         self.button_more = tk.Button(self.button_frame, text="More", font=("Georgia", 26), 
-                                     borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                     borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                     command=lambda: self.button_functions(self.button_more))
         self.button_plus_minus = tk.Button(self.button_frame, text="±", font=("Georgia", 26), 
-                                           borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                           borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                           command=lambda: self.button_functions(self.button_plus_minus))
         self.button_decimal = tk.Button(self.button_frame, text=".", font=("Georgia", 26), 
-                                        borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                        borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                        command=lambda: self.button_functions(self.button_decimal))
         
         # Stop the frames from shrinking to the size of children widgets.
         # This fixes issue with label not being packed/anchored properly.
@@ -104,3 +124,32 @@ class Calculator():
         self.button_equals.grid(row=4, column=3, sticky="nsew")
 
         self.calc_text_label.pack(side="bottom", anchor="w", padx=10, pady=10)
+    
+    def button_functions(self, button):
+        button_text = button.cget("text")
+        current_text = self.calc_text_label.cget("text")
+        
+        if (button_text == "1" or button_text == "2" or button_text == "3" 
+            or button_text == "4" or button_text == "5" or button_text == "6" 
+            or button_text == "7" or button_text == "8" or button_text == "9" 
+            or button_text == "0" or button_text == "." or button_text == "+" 
+            or button_text == "-" or button_text == "x" or button_text == "÷"):
+            self.calc_text_label.config(text=current_text + button_text)
+        elif button_text == "C":
+            self.calc_text_label.config(text="")
+        elif button_text == "⌫":
+            self.calc_text_label.config(text=current_text[:-1])
+        elif button_text == "±":
+            if current_text.startswith("-"):
+                self.calc_text_label.config(text=current_text[1:])
+            else:
+                self.calc_text_label.config(text="-" + current_text)
+        elif button_text == "More":
+            pass
+        elif button_text == "=":
+            try:
+                expression = current_text.replace("x", "*").replace("÷", "/")
+                result = eval(expression)
+                self.calc_text_label.config(text=str(result))
+            except Exception:
+                self.calc_text_label.config(text="Error")
