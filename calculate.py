@@ -1,12 +1,20 @@
 import tkinter as tk
+import math
 
 class Calculator():
     def __init__(self, master):
         self.master = master
         self.last_pressed_equals = False
+        self.select_exponent = False
         self.numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."]
+        self.more = ["%", "(", ")", "sin", "cos", "tan", "π", "log", "ln", "e"]
         self.operators = ["+", "-", "x", "÷"]
-        self.more = ["%", "(", ")", "x²", "xⁿ", "x!", "1/x", "√x", "ⁿ√x", "sin", "cos", "tan", "π", "log", "ln", "e"]
+        self.roots = ["ⁿ√x", "√x"]
+        self.other = ["x!", "x²", "xⁿ"]
+        self.change_value = ["±", "⅟x"]
+
+        self.mapping = str.maketrans("0123456789", "⁰¹²³⁴⁵⁶⁷⁸⁹")
+        self.exponent_value_to_put = ""
 
     def show(self):
         self.master.title("Calculator Screen")
@@ -26,7 +34,7 @@ class Calculator():
         self.previous_text_label = tk.Label(self.text_frame, text="",
                                            font=("Georgia", 18), bg="white", fg="#555555")
         
-        # Number buttons
+        # Number buttons 
         self.button_0 = tk.Button(self.button_frame, text="0", font=("Georgia", 26), 
                                   borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
                                   command=lambda: self.button_functions(self.button_0))
@@ -90,7 +98,7 @@ class Calculator():
                                         borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
                                         command=lambda: self.button_functions(self.button_decimal))
 
-        #More buttons
+        # More buttons
         self.button_back = tk.Button(self.more_button_frame, text="Back", font=("Georgia", 26),
                                      borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
                                      command=lambda: self.button_functions(self.button_back))
@@ -112,12 +120,14 @@ class Calculator():
                                            borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
         self.button_factorial = tk.Button(self.more_button_frame, text="x!", font=("Georgia", 26),
                                           borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
-        self.button_reciprocal = tk.Button(self.more_button_frame, text="1/x", font=("Georgia", 26),
+        self.button_reciprocal = tk.Button(self.more_button_frame, text="⅟x", font=("Georgia", 26),
                                            borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
         self.button_square_root = tk.Button(self.more_button_frame, text="√x", font=("Georgia", 26),
-                                            borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                            borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                            command=lambda: self.button_functions(self.button_square_root))
         self.button_nth_root = tk.Button(self.more_button_frame, text="ⁿ√x", font=("Georgia", 26),
-                                         borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                         borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                         command=lambda: self.button_functions(self.button_nth_root))
         self.button_sin = tk.Button(self.more_button_frame, text="sin", font=("Georgia", 26),
                                     borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
         self.button_cos = tk.Button(self.more_button_frame, text="cos", font=("Georgia", 26),
@@ -218,19 +228,32 @@ class Calculator():
     def button_functions(self, button):
         button_text = button.cget("text")
         current_text = self.calc_text_label.cget("text")
+        answer_text = self.answer_text_label.cget("text")
         
-        if (button_text in self.numbers) or (button_text in self.operators):
+        if ((button_text in self.numbers) or (button_text in self.operators)
+            or (button_text in self.more) or (button_text in self.roots) 
+            or (button_text in self.other)):
                 if self.last_pressed_equals:
-                    if button_text in self.numbers:
-                        self.previous_text_label.config(text=f"({current_text})")
+                    self.previous_text_label.config(text=f"({current_text})")
+
+                    if (button_text in self.numbers) or (button_text in self.more):
                         self.calc_text_label.config(text=button_text)
                         self.last_pressed_equals = False
                     else:
-                        self.previous_text_label.config(text=f"({current_text})")
-                        self.calc_text_label.config(text=self.answer_text_label.cget("text") + button_text)
-                        self.last_pressed_equals = False
+                        if button_text in self.roots:
+                            if button_text == "√x":
+                                self.calc_text_label.config(text=f"√({answer_text})")
+                                self.last_pressed_equals = False
+                            else:
+                                self.calc_text_label.config(text=f"")
+                                self.select_exponent = True
+                        else:   
+                            self.calc_text_label.config(text=answer_text + button_text)
+                            self.last_pressed_equals = False
                 else:
                     self.calc_text_label.config(text=current_text + button_text)
+                    self.last_pressed_equals = False
+
         elif button_text == "C":
             self.calc_text_label.config(text="")
             self.last_pressed_equals = False
@@ -238,11 +261,8 @@ class Calculator():
             self.calc_text_label.config(text=current_text[:-1])
             self.last_pressed_equals = False
         elif button_text == "±":
+            self.plus_minus()
             self.last_pressed_equals = False
-            if current_text.startswith("-"):
-                self.calc_text_label.config(text=current_text[1:])
-            else:
-                self.calc_text_label.config(text="-" + current_text)
         elif button_text == "More":
             self.button_frame.grid_forget()
             self.more_button_frame.grid(row=2, column=0, sticky="nsew")
@@ -251,24 +271,44 @@ class Calculator():
             self.button_frame.grid(row=2, column=0, sticky="nsew")
         elif button_text == "=":
             self.do_equals()
+        
+        print(self.last_pressed_equals)
 
 
     def do_equals(self):
         current_text = self.calc_text_label.cget("text")
-        try:
-            duplicates = True
-            self.last_pressed_equals = True
-            
-            while duplicates:
-                if "++" in current_text or "--" in current_text or "xx" in current_text or "÷÷" in current_text:
-                    current_text = current_text.replace("++", "+").replace("--", "-").replace("xx", "x").replace("÷÷", "÷")
-                else:
-                    duplicates = False
+        if not self.select_exponent:
+            try:
+                duplicates = True
+                self.last_pressed_equals = True
+                
+                while duplicates:
+                    if "++" in current_text or "--" in current_text or "xx" in current_text or "÷÷" in current_text:
+                        current_text = current_text.replace("++", "+").replace("--", "-").replace("xx", "x").replace("÷÷", "÷")
+                    else:
+                        duplicates = False
 
-            expression = current_text.replace("x", "*").replace("÷", "/")
-            result = eval(expression)
+                expression = current_text.replace("x", "*").replace("÷", "/")
+                result = eval(expression)
 
-            self.answer_text_label.config(text=str(result))
-        except Exception:
-            self.last_pressed_equals = True
-            self.answer_text_label.config(text="Error")
+                self.answer_text_label.config(text=str(result))
+            except Exception:
+                self.last_pressed_equals = True
+                self.answer_text_label.config(text="Error")
+        else:
+            current_text = current_text.translate(self.mapping)
+            self.exponent_value_to_put = current_text
+            self.calc_text_label.config(text=self.exponent_value_to_put + "√")
+
+            if self.answer_text_label.cget("text") != "":
+                self.calc_text_label.config(text=self.calc_text_label.cget("text") + self.answer_text_label.cget("text"))
+
+            self.last_pressed_equals = False
+            self.select_exponent = False
+
+    def plus_minus(self):
+        current_text = self.calc_text_label.cget("text")
+        if current_text.startswith("-"):
+            self.calc_text_label.config(text=current_text[1:])
+        else:
+            self.calc_text_label.config(text="-" + current_text)
