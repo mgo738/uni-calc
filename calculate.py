@@ -6,6 +6,7 @@ class Calculator():
         self.last_pressed_equals = False
         self.numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."]
         self.operators = ["+", "-", "x", "÷"]
+        self.more = ["%", "(", ")", "x²", "xⁿ", "x!", "1/x", "√x", "ⁿ√x", "sin", "cos", "tan", "π", "log", "ln", "e"]
 
     def show(self):
         self.master.title("Calculator Screen")
@@ -91,45 +92,49 @@ class Calculator():
 
         #More buttons
         self.button_back = tk.Button(self.more_button_frame, text="Back", font=("Georgia", 26),
-                                     borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                     borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                     command=lambda: self.button_functions(self.button_back))
         self.button_c_more = tk.Button(self.more_button_frame, text="C", font=("Georgia", 26),
-                                              borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                       borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                       command=lambda: self.button_functions(self.button_c_more))
         self.button_backspace_more = tk.Button(self.more_button_frame, text="⌫", font=("Georgia", 26),
-                                              borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                               borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                               command=lambda: self.button_functions(self.button_backspace_more))
         self.button_percent = tk.Button(self.more_button_frame, text="%", font=("Georgia", 26),
-                                      borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                        borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
         self.button_open_brackert = tk.Button(self.more_button_frame, text="(", font=("Georgia", 26),
-                                            borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                              borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
         self.button_close_bracket = tk.Button(self.more_button_frame, text=")", font=("Georgia", 26),
-                                            borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                              borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
         self.button_square = tk.Button(self.more_button_frame, text="x²", font=("Georgia", 26),
-                                     borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
-        self.button_raise_to_n = tk.Button(self.more_button_frame, text="xⁿ", font=("Georgia", 26),
-                                     borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
-        self.button_factorial = tk.Button(self.more_button_frame, text="x!", font=("Georgia", 26),
-                                     borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
-        self.button_reciprocal = tk.Button(self.more_button_frame, text="1/x", font=("Georgia", 26),
-                                     borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
-        self.button_square_root = tk.Button(self.more_button_frame, text="√x", font=("Georgia", 26),
-                                     borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
-        self.button_nth_root = tk.Button(self.more_button_frame, text="ⁿ√x", font=("Georgia", 26),
-                                     borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
-        self.button_sin = tk.Button(self.more_button_frame, text="sin", font=("Georgia", 26),
-                                     borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
-        self.button_cos = tk.Button(self.more_button_frame, text="cos", font=("Georgia", 26),
-                                     borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
-        self.button_tan = tk.Button(self.more_button_frame, text="tan", font=("Georgia", 26),
-                                     borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
-        self.button_pi = tk.Button(self.more_button_frame, text="π", font=("Georgia", 26),
-                                     borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
-        self.button_log = tk.Button(self.more_button_frame, text="log", font=("Georgia", 26),
-                                     borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
-        self.button_ln = tk.Button(self.more_button_frame, text="ln", font=("Georgia", 26),
-                                     borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
-        self.button_e = tk.Button(self.more_button_frame, text="e", font=("Georgia", 26),
-                                     borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
-        self.button_equals_more = tk.Button(self.more_button_frame, text="=", font=("Georgia", 26),
                                        borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+        self.button_raise_to_n = tk.Button(self.more_button_frame, text="xⁿ", font=("Georgia", 26),
+                                           borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+        self.button_factorial = tk.Button(self.more_button_frame, text="x!", font=("Georgia", 26),
+                                          borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+        self.button_reciprocal = tk.Button(self.more_button_frame, text="1/x", font=("Georgia", 26),
+                                           borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+        self.button_square_root = tk.Button(self.more_button_frame, text="√x", font=("Georgia", 26),
+                                            borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+        self.button_nth_root = tk.Button(self.more_button_frame, text="ⁿ√x", font=("Georgia", 26),
+                                         borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+        self.button_sin = tk.Button(self.more_button_frame, text="sin", font=("Georgia", 26),
+                                    borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+        self.button_cos = tk.Button(self.more_button_frame, text="cos", font=("Georgia", 26),
+                                    borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+        self.button_tan = tk.Button(self.more_button_frame, text="tan", font=("Georgia", 26),
+                                    borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+        self.button_pi = tk.Button(self.more_button_frame, text="π", font=("Georgia", 26),
+                                   borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+        self.button_log = tk.Button(self.more_button_frame, text="log", font=("Georgia", 26),
+                                    borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+        self.button_ln = tk.Button(self.more_button_frame, text="ln", font=("Georgia", 26),
+                                   borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+        self.button_e = tk.Button(self.more_button_frame, text="e", font=("Georgia", 26),
+                                  borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+        self.button_equals_more = tk.Button(self.more_button_frame, text="=", font=("Georgia", 26),
+                                            borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                            command=lambda: self.button_functions(self.button_equals_more))
         
         # Stop the frames from shrinking to the size of children widgets.
         # This fixes issue with label not being packed/anchored properly.
@@ -242,6 +247,9 @@ class Calculator():
         elif button_text == "More":
             self.button_frame.grid_forget()
             self.more_button_frame.grid(row=2, column=0, sticky="nsew")
+        elif button_text == "Back":
+            self.more_button_frame.grid_forget()
+            self.button_frame.grid(row=2, column=0, sticky="nsew")
         elif button_text == "=":
             try:
                 duplicates = True
