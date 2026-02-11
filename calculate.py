@@ -3,6 +3,9 @@ import tkinter as tk
 class Calculator():
     def __init__(self, master):
         self.master = master
+        self.last_pressed_equals = False
+        self.numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."]
+        self.operators = ["+", "-", "x", "÷"]
 
     def show(self):
         self.master.title("Calculator Screen")
@@ -17,6 +20,8 @@ class Calculator():
                                        font=("Georgia", 24), bg="white")
         self.answer_text_label = tk.Label(self.text_frame, text="",
                                          font=("Georgia", 24), bg="white")
+        self.previous_text_label = tk.Label(self.text_frame, text="",
+                                           font=("Georgia", 18), bg="white", fg="#555555")
         
         # Number buttons
         self.button_0 = tk.Button(self.button_frame, text="0", font=("Georgia", 26), 
@@ -127,17 +132,25 @@ class Calculator():
 
         self.calc_text_label.pack(side="left", anchor="s", padx=10, pady=10)
         self.answer_text_label.pack(side="right", anchor="s", padx=10, pady=10)
+        self.previous_text_label.place(relx=0.02, rely=0.75, anchor="sw")
     
     def button_functions(self, button):
         button_text = button.cget("text")
         current_text = self.calc_text_label.cget("text")
         
-        if (button_text == "1" or button_text == "2" or button_text == "3" 
-            or button_text == "4" or button_text == "5" or button_text == "6" 
-            or button_text == "7" or button_text == "8" or button_text == "9" 
-            or button_text == "0" or button_text == "." or button_text == "+" 
-            or button_text == "-" or button_text == "x" or button_text == "÷"):
-            self.calc_text_label.config(text=current_text + button_text)
+        if (button_text in self.numbers) or (button_text in self.operators):
+                if self.last_pressed_equals:
+                    if button_text in self.numbers:
+                        self.previous_text_label.config(text=f"({current_text})")
+                        self.calc_text_label.config(text=button_text)
+                        self.last_pressed_equals = False
+                    else:
+                        self.previous_text_label.config(text=f"({current_text})")
+                        self.calc_text_label.config(text=self.answer_text_label.cget("text") + button_text)
+                        self.last_pressed_equals = False
+                else:
+                    self.calc_text_label.config(text=current_text + button_text)
+
         elif button_text == "C":
             self.calc_text_label.config(text="")
         elif button_text == "⌫":
@@ -152,6 +165,7 @@ class Calculator():
         elif button_text == "=":
             try:
                 duplicates = True
+                self.last_pressed_equals = True
                 
                 while duplicates:
                     if "++" in current_text or "--" in current_text or "xx" in current_text or "÷÷" in current_text:
@@ -161,6 +175,9 @@ class Calculator():
 
                 expression = current_text.replace("x", "*").replace("÷", "/")
                 result = eval(expression)
+
                 self.answer_text_label.config(text=str(result))
             except Exception:
-                self.answer_text_label.config(text="Error")
+                self.last_pressed_equals = True
+                self.answer_text_label.config(text="Error")                   
+            
