@@ -145,9 +145,17 @@ class Calculator():
             else:
                 self.calc_text_label.config(text="-" + current_text)
         elif button_text == "More":
-            pass
+            pass # Add to this later
         elif button_text == "=":
             try:
+                duplicates = True
+                
+                while duplicates:
+                    if "++" in current_text or "--" in current_text or "**" in current_text or "//" in current_text:
+                        current_text = current_text.replace("++", "+").replace("--", "-").replace("**", "*").replace("//", "/")
+                    else:
+                        duplicates = False
+
                 expression = current_text.replace("x", "*").replace("÷", "/")
                 result = eval(expression)
                 self.calc_text_label.config(text=str(result))
