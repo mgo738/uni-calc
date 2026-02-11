@@ -15,6 +15,8 @@ class Calculator():
                                    borderwidth=0, highlightthickness=0)
         self.button_frame = tk.Frame(self.master, width=500, height=450, bg=self.frame_bg,
                                      borderwidth=0, highlightthickness=0)
+        self.more_button_frame = tk.Frame(self.master, width=500, height=450, bg=self.frame_bg,
+                                         borderwidth=0, highlightthickness=0)
 
         self.calc_text_label = tk.Label(self.text_frame, text="",
                                        font=("Georgia", 24), bg="white")
@@ -86,11 +88,14 @@ class Calculator():
         self.button_decimal = tk.Button(self.button_frame, text=".", font=("Georgia", 26), 
                                         borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
                                         command=lambda: self.button_functions(self.button_decimal))
+
+        #More buttons
         
         # Stop the frames from shrinking to the size of children widgets.
         # This fixes issue with label not being packed/anchored properly.
         self.text_frame.grid_propagate(False)
         self.button_frame.grid_propagate(False)
+        self.more_button_frame.grid_propagate(False)
 
         self.master.grid_rowconfigure(1, minsize=280)
         self.master.grid_rowconfigure(2, minsize=450)
@@ -153,15 +158,19 @@ class Calculator():
 
         elif button_text == "C":
             self.calc_text_label.config(text="")
+            self.last_pressed_equals = False
         elif button_text == "⌫":
             self.calc_text_label.config(text=current_text[:-1])
+            self.last_pressed_equals = False
         elif button_text == "±":
+            self.last_pressed_equals = False
             if current_text.startswith("-"):
                 self.calc_text_label.config(text=current_text[1:])
             else:
                 self.calc_text_label.config(text="-" + current_text)
         elif button_text == "More":
-            pass # Add to this later
+            self.button_frame.grid_forget()
+            self.more_button_frame.grid(row=2, column=0, sticky="nsew")
         elif button_text == "=":
             try:
                 duplicates = True
