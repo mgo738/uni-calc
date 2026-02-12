@@ -240,18 +240,17 @@ class Calculator():
                         self.calc_text_label.config(text=button_text)
                         self.last_pressed_equals = False
                     else:
-                        if button_text in self.roots:
-                            if button_text == "√x":
-                                self.calc_text_label.config(text=f"√({answer_text})")
-                                self.last_pressed_equals = False
-                            else:
-                                self.calc_text_label.config(text=f"")
-                                self.select_exponent = True
+                        if button_text == "√x":
+                            self.calc_text_label.config(text=f"√({answer_text})")
+                            self.last_pressed_equals = False
+                        elif button_text == "ⁿ√x":
+                            self.calc_text_label.config(text=f"")
+                            self.select_exponent = True
                         else:   
-                            self.calc_text_label.config(text=answer_text + button_text)
+                            self.calc_text_label.config(text=answer_text + button_text) # MUST IMPLEMENT FUNCTIONALITY FOR OTHER BUTTONS - NOT ROOTS
                             self.last_pressed_equals = False
                 else:
-                    self.calc_text_label.config(text=current_text + button_text)
+                    self.calc_text_label.config(text=current_text + button_text) # IMPLEMENT FUNCTIONALITY FOR ALL 'MORE' BUTTONS FOR NOT WHEN EQUALS BUTTON IS PRESSED
                     self.last_pressed_equals = False
 
         elif button_text == "C":
@@ -272,7 +271,6 @@ class Calculator():
         elif button_text == "=":
             self.do_equals()
         
-        print(self.last_pressed_equals)
 
 
     def do_equals(self):
@@ -306,9 +304,18 @@ class Calculator():
             self.last_pressed_equals = False
             self.select_exponent = False
 
+
     def plus_minus(self):
-        current_text = self.calc_text_label.cget("text")
-        if current_text.startswith("-"):
-            self.calc_text_label.config(text=current_text[1:])
+        if not self.last_pressed_equals:
+            current_text = self.calc_text_label.cget("text")
+            if current_text.startswith("-"):
+                self.calc_text_label.config(text=current_text[1:])
+            else:
+                self.calc_text_label.config(text="-" + current_text)
         else:
-            self.calc_text_label.config(text="-" + current_text)
+            answer_text = self.answer_text_label.cget("text") 
+            if answer_text.startswith("-"): 
+                self.calc_text_label.config(text=answer_text[1:]) 
+            else: 
+                self.calc_text_label.config(text="-" + answer_text)
+            
