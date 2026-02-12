@@ -257,10 +257,7 @@ class Calculator():
                     if (button_text in self.numbers) or (button_text in self.more):
                         self.calc_text_label.config(text=button_text)
                     else:
-                        if button_text == "√x":
-                            self.calc_text_label.config(text=f"√({answer_text})")
-
-                        elif button_text == "ⁿ√x" or button_text == "xⁿ":
+                        if button_text == "ⁿ√x" or button_text == "xⁿ":
                             self.saved_text_for_exponent = current_text
                             self.calc_text_label.config(text=f"")
                             self.select_exponent = True
@@ -269,6 +266,9 @@ class Calculator():
                                 self.nth_root = True
                             else: 
                                 self.nth_power = True
+                        elif (button_text in self.roots) or (button_text in self.other):
+                            text_to_add = button_text.replace("x", "(" + answer_text + ")") 
+                            self.calc_text_label.config(text=text_to_add)
                         else:   
                             self.calc_text_label.config(text=answer_text + button_text) # MUST IMPLEMENT FUNCTIONALITY FOR OTHER BUTTONS - NOT ROOTS
                         
