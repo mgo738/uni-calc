@@ -6,15 +6,19 @@ class Calculator():
         self.master = master
         self.last_pressed_equals = False
         self.select_exponent = False
+        self.nth_root = False
+        self.nth_power = False
+
         self.numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."]
-        self.more = ["%", "(", ")", "sin", "cos", "tan", "π", "log", "ln", "e"]
-        self.operators = ["+", "-", "x", "÷"]
+        self.more = ["(", ")", "sin", "cos", "tan", "π", "log", "ln", "e"]
+        self.operators = ["+", "-", "x", "÷", "%"]
         self.roots = ["ⁿ√x", "√x"]
         self.other = ["x!", "x²", "xⁿ"]
         self.change_value = ["±", "⅟x"]
 
         self.mapping = str.maketrans("0123456789", "⁰¹²³⁴⁵⁶⁷⁸⁹")
         self.exponent_value_to_put = ""
+        self.saved_text_for_exponent = ""
 
     def show(self):
         self.master.title("Calculator Screen")
@@ -109,19 +113,26 @@ class Calculator():
                                                borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
                                                command=lambda: self.button_functions(self.button_backspace_more))
         self.button_percent = tk.Button(self.more_button_frame, text="%", font=("Georgia", 26),
-                                        borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
-        self.button_open_brackert = tk.Button(self.more_button_frame, text="(", font=("Georgia", 26),
-                                              borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                        borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                        command=lambda: self.button_functions(self.button_percent))
+        self.button_open_bracket = tk.Button(self.more_button_frame, text="(", font=("Georgia", 26),
+                                              borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                              command=lambda: self.button_functions(self.button_open_bracket))
         self.button_close_bracket = tk.Button(self.more_button_frame, text=")", font=("Georgia", 26),
-                                              borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                              borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                              command=lambda: self.button_functions(self.button_close_bracket))
         self.button_square = tk.Button(self.more_button_frame, text="x²", font=("Georgia", 26),
-                                       borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                       borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                       command=lambda: self.button_functions(self.button_square))
         self.button_raise_to_n = tk.Button(self.more_button_frame, text="xⁿ", font=("Georgia", 26),
-                                           borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                           borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                           command=lambda: self.button_functions(self.button_raise_to_n))
         self.button_factorial = tk.Button(self.more_button_frame, text="x!", font=("Georgia", 26),
-                                          borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                          borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                          command=lambda: self.button_functions(self.button_factorial))
         self.button_reciprocal = tk.Button(self.more_button_frame, text="⅟x", font=("Georgia", 26),
-                                           borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                           borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                           command=lambda: self.button_functions(self.button_reciprocal))
         self.button_square_root = tk.Button(self.more_button_frame, text="√x", font=("Georgia", 26),
                                             borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
                                             command=lambda: self.button_functions(self.button_square_root))
@@ -129,19 +140,26 @@ class Calculator():
                                          borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
                                          command=lambda: self.button_functions(self.button_nth_root))
         self.button_sin = tk.Button(self.more_button_frame, text="sin", font=("Georgia", 26),
-                                    borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                    borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                    command=lambda: self.button_functions(self.button_sin))
         self.button_cos = tk.Button(self.more_button_frame, text="cos", font=("Georgia", 26),
-                                    borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                    borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                    command=lambda: self.button_functions(self.button_cos))
         self.button_tan = tk.Button(self.more_button_frame, text="tan", font=("Georgia", 26),
-                                    borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                    borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                    command=lambda: self.button_functions(self.button_tan))
         self.button_pi = tk.Button(self.more_button_frame, text="π", font=("Georgia", 26),
-                                   borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                   borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                   command=lambda: self.button_functions(self.button_pi))
         self.button_log = tk.Button(self.more_button_frame, text="log", font=("Georgia", 26),
-                                    borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                    borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                    command=lambda: self.button_functions(self.button_log))
         self.button_ln = tk.Button(self.more_button_frame, text="ln", font=("Georgia", 26),
-                                   borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                   borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                   command=lambda: self.button_functions(self.button_ln))
         self.button_e = tk.Button(self.more_button_frame, text="e", font=("Georgia", 26),
-                                  borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                  borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                  command=lambda: self.button_functions(self.button_e))
         self.button_equals_more = tk.Button(self.more_button_frame, text="=", font=("Georgia", 26),
                                             borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
                                             command=lambda: self.button_functions(self.button_equals_more))
@@ -204,7 +222,7 @@ class Calculator():
         self.button_c_more.grid(row=0, column=1, sticky="nsew")
         self.button_backspace_more.grid(row=0, column=2, sticky="nsew")
         self.button_percent.grid(row=0, column=3, sticky="nsew")
-        self.button_open_brackert.grid(row=1, column=0, sticky="nsew")
+        self.button_open_bracket.grid(row=1, column=0, sticky="nsew")
         self.button_close_bracket.grid(row=1, column=1, sticky="nsew")
         self.button_square.grid(row=1, column=2, sticky="nsew")
         self.button_raise_to_n.grid(row=1, column=3, sticky="nsew")
@@ -238,17 +256,24 @@ class Calculator():
 
                     if (button_text in self.numbers) or (button_text in self.more):
                         self.calc_text_label.config(text=button_text)
-                        self.last_pressed_equals = False
                     else:
                         if button_text == "√x":
                             self.calc_text_label.config(text=f"√({answer_text})")
-                            self.last_pressed_equals = False
-                        elif button_text == "ⁿ√x":
+
+                        elif button_text == "ⁿ√x" or button_text == "xⁿ":
+                            self.saved_text_for_exponent = current_text
                             self.calc_text_label.config(text=f"")
                             self.select_exponent = True
+
+                            if button_text == "ⁿ√x":
+                                self.nth_root = True
+                            else: 
+                                self.nth_power = True
                         else:   
                             self.calc_text_label.config(text=answer_text + button_text) # MUST IMPLEMENT FUNCTIONALITY FOR OTHER BUTTONS - NOT ROOTS
-                            self.last_pressed_equals = False
+                        
+                    if not self.select_exponent:
+                        self.last_pressed_equals = False
                 else:
                     self.calc_text_label.config(text=current_text + button_text) # IMPLEMENT FUNCTIONALITY FOR ALL 'MORE' BUTTONS FOR NOT WHEN EQUALS BUTTON IS PRESSED
                     self.last_pressed_equals = False
@@ -269,6 +294,8 @@ class Calculator():
             self.button_frame.grid(row=2, column=0, sticky="nsew")
         elif button_text == "=":
             self.do_equals()
+
+        print(self.last_pressed_equals, self.select_exponent)
         
 
 
@@ -295,11 +322,22 @@ class Calculator():
         else:
             current_text = current_text.translate(self.mapping)
             self.exponent_value_to_put = current_text
-            self.calc_text_label.config(text=self.exponent_value_to_put + "√")
+            
+            if self.nth_root:
+                if self.last_pressed_equals:
+                    self.calc_text_label.config(text=self.exponent_value_to_put + "√(" + self.answer_text_label.cget("text") + ")")
+                else: 
+                    self.calc_text_label.config(text=self.saved_text_for_exponent + self.exponent_value_to_put + "√(")
 
-            if self.answer_text_label.cget("text") != "":
-                self.calc_text_label.config(text=self.calc_text_label.cget("text") + self.answer_text_label.cget("text"))
-
+                self.nth_root = False
+            elif self.nth_power:
+                if self.last_pressed_equals:
+                    self.calc_text_label.config(text=self.answer_text_label.cget("text") + self.exponent_value_to_put)
+                else: 
+                    self.calc_text_label.config(text=self.saved_text_for_exponent + self.exponent_value_to_put)
+                
+                self.nth_power = False
+            
             self.last_pressed_equals = False
             self.select_exponent = False
 
