@@ -272,7 +272,7 @@ class Calculator():
                     elif (button_text in self.special_operators):
                         self.calc_text_label.config(text=button_text + "(" + answer_text + ")")
                     else:   
-                        self.calc_text_label.config(text=answer_text + button_text) # MUST IMPLEMENT FUNCTIONALITY FOR OTHER BUTTONS - NOT ROOTS
+                        self.calc_text_label.config(text=answer_text + button_text)
                         
                     if not self.select_exponent:
                         self.last_pressed_equals = False
@@ -296,10 +296,7 @@ class Calculator():
             self.button_frame.grid(row=2, column=0, sticky="nsew")
         elif button_text == "=":
             self.do_equals()
-
-        print(self.last_pressed_equals, self.select_exponent)
         
-
 
     def do_equals(self):
         current_text = self.calc_text_label.cget("text")
@@ -357,4 +354,3 @@ class Calculator():
                 self.calc_text_label.config(text=answer_text[1:]) 
             else: 
                 self.calc_text_label.config(text="-" + answer_text)
-            
