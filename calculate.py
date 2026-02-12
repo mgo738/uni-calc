@@ -252,7 +252,6 @@ class Calculator():
                 else:
                     self.calc_text_label.config(text=current_text + button_text) # IMPLEMENT FUNCTIONALITY FOR ALL 'MORE' BUTTONS FOR NOT WHEN EQUALS BUTTON IS PRESSED
                     self.last_pressed_equals = False
-
         elif button_text == "C":
             self.calc_text_label.config(text="")
             self.last_pressed_equals = False
@@ -282,7 +281,7 @@ class Calculator():
                 
                 while duplicates:
                     if "++" in current_text or "--" in current_text or "xx" in current_text or "÷÷" in current_text:
-                        current_text = current_text.replace("++", "+").replace("--", "-").replace("xx", "x").replace("÷÷", "÷")
+                        current_text = current_text.replace("++", "+").replace("--", "+").replace("xx", "x").replace("÷÷", "÷")
                     else:
                         duplicates = False
 
