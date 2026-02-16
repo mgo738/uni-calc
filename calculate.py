@@ -288,6 +288,9 @@ class Calculator():
         elif button_text == "±":
             self.plus_minus()
             self.last_pressed_equals = False
+        elif button_text == "⅟x":
+            self.reciprocate()
+            self.last_pressed_equals = False
         elif button_text == "More":
             self.button_frame.grid_forget()
             self.more_button_frame.grid(row=2, column=0, sticky="nsew")
@@ -298,7 +301,7 @@ class Calculator():
             self.do_equals()
         
 
-    def do_equals(self):
+    def do_equals(self): # Need to create replacements for pow, log, ln, fact, thenf figure out how to handle brackets - 8(20) - and π/e - 3π, 1/2e etc..
         current_text = self.calc_text_label.cget("text")
         if not self.select_exponent:
             try:
@@ -354,3 +357,19 @@ class Calculator():
                 self.calc_text_label.config(text=answer_text[1:]) 
             else: 
                 self.calc_text_label.config(text="-" + answer_text)
+
+    
+    def reciprocate(self):
+        if self.last_pressed_equals:
+            answer_text = self.answer_text_label.cget("text")
+            self.calc_text_label.config(text="1÷(" + answer_text + ")")
+        else:
+            current_text = self.calc_text_label.cget("text")
+            if current_text.startswith("1÷"):
+                self.calc_text_label.config(text=current_text[2:].strip("()"))
+            else:
+                terms = current_text.split("÷", 1)
+                if len(terms) == 1:
+                    self.calc_text_label.config(text="1÷(" + current_text + ")")
+                else:
+                    self.calc_text_label.config(text=f'({terms[1].strip("()")})' + "÷" + terms[0].strip("()"))
