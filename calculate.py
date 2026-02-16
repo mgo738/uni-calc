@@ -244,41 +244,15 @@ class Calculator():
         self.answer_text_label.pack(side="right", anchor="s", padx=10, pady=10)
         self.previous_text_label.place(relx=0.02, rely=0.75, anchor="sw")
     
+    
     def button_functions(self, button):
         button_text = button.cget("text")
         current_text = self.calc_text_label.cget("text")
-        answer_text = self.answer_text_label.cget("text")
         
         if ((button_text in self.numbers) or (button_text in self.operators)
             or (button_text in self.more) or (button_text in self.roots) 
             or (button_text in self.other) or (button_text in self.special_operators)):
-                if self.last_pressed_equals:
-                    self.previous_text_label.config(text=f"({current_text})")
-
-                    if (button_text in self.numbers) or (button_text in self.more):
-                        self.calc_text_label.config(text=button_text)
-                    elif button_text == "ⁿ√x" or button_text == "xⁿ":
-                        self.saved_text_for_exponent = current_text
-                        self.calc_text_label.config(text=f"")
-                        self.select_exponent = True
-
-                        if button_text == "ⁿ√x":
-                            self.nth_root = True
-                        else: 
-                            self.nth_power = True
-                    elif (button_text in self.roots) or (button_text in self.other):
-                        text_to_add = button_text.replace("x", "(" + answer_text + ")") 
-                        self.calc_text_label.config(text=text_to_add)
-                    elif (button_text in self.special_operators):
-                        self.calc_text_label.config(text=button_text + "(" + answer_text + ")")
-                    else:   
-                        self.calc_text_label.config(text=answer_text + button_text)
-                        
-                    if not self.select_exponent:
-                        self.last_pressed_equals = False
-                else:
-                    self.calc_text_label.config(text=current_text + button_text) # IMPLEMENT FUNCTIONALITY FOR ALL 'MORE' BUTTONS FOR NOT WHEN EQUALS BUTTON IS PRESSED
-                    self.last_pressed_equals = False
+                self.normal_button(button)
         elif button_text == "C":
             self.calc_text_label.config(text="")
             self.last_pressed_equals = False
@@ -344,6 +318,39 @@ class Calculator():
             self.select_exponent = False
 
 
+    def normal_button(self, button):
+        button_text = button.cget("text")
+        current_text = self.calc_text_label.cget("text")
+        answer_text = self.answer_text_label.cget("text")
+        if self.last_pressed_equals:
+            self.previous_text_label.config(text=f"({current_text})")
+
+            if (button_text in self.numbers) or (button_text in self.more):
+                self.calc_text_label.config(text=button_text)
+            elif button_text == "ⁿ√x" or button_text == "xⁿ":
+                self.saved_text_for_exponent = current_text
+                self.calc_text_label.config(text=f"")
+                self.select_exponent = True
+
+                if button_text == "ⁿ√x":
+                    self.nth_root = True
+                else: 
+                    self.nth_power = True
+            elif (button_text in self.roots) or (button_text in self.other):
+                text_to_add = button_text.replace("x", "(" + answer_text + ")") 
+                self.calc_text_label.config(text=text_to_add)
+            elif (button_text in self.special_operators):
+                self.calc_text_label.config(text=button_text + "(" + answer_text + ")")
+            else:   
+                self.calc_text_label.config(text=answer_text + button_text)
+                
+            if not self.select_exponent:
+                self.last_pressed_equals = False
+        else:
+            self.calc_text_label.config(text=current_text + button_text) # IMPLEMENT FUNCTIONALITY FOR ALL 'MORE' BUTTONS FOR NOT WHEN EQUALS BUTTON IS PRESSED
+            self.last_pressed_equals = False
+    
+    
     def plus_minus(self):
         if not self.last_pressed_equals:
             current_text = self.calc_text_label.cget("text")
