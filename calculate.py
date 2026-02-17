@@ -275,7 +275,7 @@ class Calculator():
             self.do_equals()
         
 
-    def do_equals(self): # Need to create replacements for pow, log, ln, fact, thenf figure out how to handle brackets - 8(20) - and π/e - 3π, 1/2e etc..
+    def do_equals(self): # Need to look into factorial, nth root and powers
         current_text = self.calc_text_label.cget("text")
         if not self.select_exponent:
             try:
@@ -287,9 +287,15 @@ class Calculator():
                         current_text = current_text.replace("++", "+").replace("--", "+").replace("xx", "x").replace("÷÷", "÷")
                     else:
                         duplicates = False
+                
+                # Replace some text on calc display to actual things python can work with
+                current_text = current_text.replace("sin", "math.sin").replace("cos", "math.cos").replace("tan", "math.tan")
+                current_text = current_text.replace("log", "math.log10").replace("ln", "math.log")
+                current_text = current_text.replace("%", "*0.01").replace("e", "math.e").replace("π", "math.pi")
+                current_text = current_text.replace("√", "math.sqrt")
+                final_expression = current_text.replace("x", "*").replace("÷", "/")
 
-                expression = current_text.replace("x", "*").replace("÷", "/")
-                result = eval(expression)
+                result = eval(final_expression)
 
                 self.answer_text_label.config(text=str(result))
             except Exception:
