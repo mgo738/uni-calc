@@ -274,8 +274,6 @@ class Calculator():
             self.button_frame.grid(row=2, column=0, sticky="nsew")
         elif button_text == "=":
             self.do_equals()
-
-        print(self.last_pressed_equals)
         
 
     def do_equals(self): # Need to look into factorial, nth root and powers
@@ -293,6 +291,9 @@ class Calculator():
 
                 while "√" in current_text:
                     current_text = self.nth_root_conversion(current_text)
+                
+                while "!" in current_text:
+                    current_text = self.factorial_conversion(current_text)
 
                 # Replace some text on calc display to actual things python can work with
                 current_text = current_text.replace("sin", "math.sin").replace("cos", "math.cos").replace("tan", "math.tan")
@@ -312,16 +313,20 @@ class Calculator():
             
             if self.nth_root:
                 if self.last_pressed_equals:
-                    self.calc_text_label.config(text=self.exponent_value_to_put + "√(" + self.answer_text_label.cget("text") + ")")
+                    self.calc_text_label.config(text=self.exponent_value_to_put 
+                                                + "√(" + self.answer_text_label.cget("text") + ")")
                 else: 
-                    self.calc_text_label.config(text=self.saved_text_for_exponent + self.exponent_value_to_put + "√(")
+                    self.calc_text_label.config(text=self.saved_text_for_exponent 
+                                                + self.exponent_value_to_put + "√(")
 
                 self.nth_root = False
             elif self.nth_power:
                 if self.last_pressed_equals:
-                    self.calc_text_label.config(text=self.answer_text_label.cget("text") + self.exponent_value_to_put)
+                    self.calc_text_label.config(text=self.answer_text_label.cget("text") 
+                                                + self.exponent_value_to_put)
                 else: 
-                    self.calc_text_label.config(text=self.saved_text_for_exponent + self.exponent_value_to_put)
+                    self.calc_text_label.config(text=self.saved_text_for_exponent 
+                                                + self.exponent_value_to_put)
                 
                 self.nth_power = False
             
@@ -417,6 +422,38 @@ class Calculator():
             print(current_text)
         else:
             current_text = current_text.replace("√", "math.sqrt", 1)
+
+        return current_text
+    
+
+    def factorial_conversion(self, current_text):
+        is_number = True
+        numbers_for_factorial = ""
+
+        factorial_index = current_text.index("!")
+        current_index = factorial_index
+
+        while is_number:
+            if current_text[current_index-1] in self.numbers:
+                current_index -= 1
+            elif current_text[current_index-1] == ")":
+                current_index -= 1
+
+                while current_text[current_index-1] != "(":
+                    numbers_for_factorial += current_text[current_index-1]
+                    current_index -= 1
+                
+                numbers_for_factorial = numbers_for_factorial[::-1]
+                numbers_for_factorial = eval(numbers_for_factorial)
+                is_number = False
+            else:
+                is_number = False
+
+        current_text_list = list(current_text)
+        current_text_list.pop(factorial_index)
+        current_text_list.insert(factorial_index, ")")
+        current_text_list.insert(current_index, "math.factorial(")
+        current_text = "".join(current_text_list)
 
         return current_text
     
