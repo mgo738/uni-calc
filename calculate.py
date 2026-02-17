@@ -17,7 +17,8 @@ class Calculator():
         self.other = ["x!", "x²", "xⁿ"]
         self.change_value = ["±", "⅟x"]
 
-        self.mapping = str.maketrans("0123456789", "⁰¹²³⁴⁵⁶⁷⁸⁹")
+        self.normal_to_exp = str.maketrans("0123456789", "⁰¹²³⁴⁵⁶⁷⁸⁹")
+        self.exp_to_normal = str.maketrans("⁰¹²³⁴⁵⁶⁷⁸⁹", "0123456789")
         self.exponent_value_to_put = ""
         self.saved_text_for_exponent = ""
 
@@ -273,6 +274,8 @@ class Calculator():
             self.button_frame.grid(row=2, column=0, sticky="nsew")
         elif button_text == "=":
             self.do_equals()
+
+        print(self.last_pressed_equals)
         
 
     def do_equals(self): # Need to look into factorial, nth root and powers
@@ -287,12 +290,14 @@ class Calculator():
                         current_text = current_text.replace("++", "+").replace("--", "+").replace("xx", "x").replace("÷÷", "÷")
                     else:
                         duplicates = False
-                
+
+                while "√" in current_text:
+                    current_text = self.nth_root_conversion(current_text)
+
                 # Replace some text on calc display to actual things python can work with
                 current_text = current_text.replace("sin", "math.sin").replace("cos", "math.cos").replace("tan", "math.tan")
                 current_text = current_text.replace("log", "math.log10").replace("ln", "math.log")
                 current_text = current_text.replace("%", "*0.01").replace("e", "math.e").replace("π", "math.pi")
-                current_text = current_text.replace("√", "math.sqrt")
                 final_expression = current_text.replace("x", "*").replace("÷", "/")
 
                 result = eval(final_expression)
@@ -302,7 +307,7 @@ class Calculator():
                 self.last_pressed_equals = True
                 self.answer_text_label.config(text="Error")
         else:
-            current_text = current_text.translate(self.mapping)
+            current_text = current_text.translate(self.normal_to_exp)
             self.exponent_value_to_put = current_text
             
             if self.nth_root:
@@ -332,7 +337,10 @@ class Calculator():
             self.previous_text_label.config(text=f"({current_text})")
 
             if (button_text in self.numbers) or (button_text in self.more):
-                self.calc_text_label.config(text=button_text)
+                if self.select_exponent:
+                    self.calc_text_label.config(text=current_text + button_text)
+                else:
+                    self.calc_text_label.config(text=button_text)
             elif button_text == "ⁿ√x" or button_text == "xⁿ":
                 self.saved_text_for_exponent = current_text
                 self.calc_text_label.config(text=f"")
@@ -373,6 +381,46 @@ class Calculator():
                 self.last_pressed_equals = False
     
     
+    def nth_root_conversion(self, current_text):
+        is_super = True
+        current_index = 0
+        root_index = 0
+        exponents = ""
+
+        current_index = current_text.index("√")
+        root_index = current_index
+
+        while is_super:
+            if current_text[current_index-1] in "⁰¹²³⁴⁵⁶⁷⁸⁹":
+                exponents += current_text[current_index-1]
+                current_index -= 1
+            else:
+                is_super = False
+            
+        if exponents:
+            exponents = exponents[::-1]
+            exponents = exponents.translate(self.exp_to_normal)
+
+            current_text_list = list(current_text)
+            while (current_index < root_index):
+                current_text_list.pop(current_index)
+                root_index -= 1
+            
+            current_text = "".join(current_text_list)
+            current_text = current_text.replace("√", "math.pow", 1)
+
+            index_for_power = current_text.find(")", current_index)
+            current_text_list = list(current_text)
+            print(current_text_list)
+            current_text_list.insert(index_for_power, "," + str(1/int(exponents)))
+            current_text = "".join(current_text_list)
+            print(current_text)
+        else:
+            current_text = current_text.replace("√", "math.sqrt", 1)
+
+        return current_text
+    
+
     def plus_minus(self):
         if not self.last_pressed_equals:
             current_text = self.calc_text_label.cget("text")
