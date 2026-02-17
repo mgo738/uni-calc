@@ -347,8 +347,24 @@ class Calculator():
             if not self.select_exponent:
                 self.last_pressed_equals = False
         else:
-            self.calc_text_label.config(text=current_text + button_text) # IMPLEMENT FUNCTIONALITY FOR ALL 'MORE' BUTTONS FOR NOT WHEN EQUALS BUTTON IS PRESSED
-            self.last_pressed_equals = False
+            if button_text in self.special_operators:
+                self.calc_text_label.config(text=current_text + button_text + "(")
+            elif (button_text == "ⁿ√x") or (button_text == "xⁿ"):
+                self.saved_text_for_exponent = current_text
+                self.calc_text_label.config(text=f"")
+                self.select_exponent = True
+
+                if button_text == "ⁿ√x":
+                    self.nth_root = True
+                else: 
+                    self.nth_power = True
+            elif button_text == "√x":
+                self.calc_text_label.config(text=current_text + "√(")
+            elif button_text in self.other:
+                self.calc_text_label.config(text=current_text + button_text.replace("x", ""))
+            else:
+                self.calc_text_label.config(text=current_text + button_text)
+                self.last_pressed_equals = False
     
     
     def plus_minus(self):
