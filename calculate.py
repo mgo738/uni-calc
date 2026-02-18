@@ -291,7 +291,7 @@ class Calculator():
                         duplicates = False
 
                 # Add a * before brackets that contain a number before them
-                current_text = self.brackets_conversion(current_text)
+                current_text = self.multiplication_conversion(current_text, "(")
 
                 while "√" in current_text:
                     current_text = self.nth_root_conversion(current_text)
@@ -306,9 +306,10 @@ class Calculator():
                 current_text = current_text.replace("sin", "math.sin").replace("cos", "math.cos").replace("tan", "math.tan")
                 current_text = current_text.replace("log", "math.log10").replace("ln", "math.log")
                 current_text = current_text.replace("%", "*0.01").replace("e", "math.e").replace("π", "math.pi")
-                final_expression = current_text.replace("x", "*").replace("÷", "/")
+                current_text = current_text.replace("x", "*").replace("÷", "/")
+                current_text = self.multiplication_conversion(current_text, "m")
 
-                result = eval(final_expression)
+                result = eval(current_text)
 
                 self.answer_text_label.config(text=str(result))
             except Exception:
@@ -491,14 +492,14 @@ class Calculator():
         return current_text
 
 
-    def brackets_conversion(self, current_text):
+    def multiplication_conversion(self, current_text, case):
         current_text_list = list(current_text)
         this_value = ""
         previous_value = ""
 
         for item in range(len(current_text_list)):
             this_value = current_text_list[item]
-            if this_value == "(":
+            if this_value == case:
                 if previous_value in self.numbers:
                     current_text_list[item] = "*" + current_text_list[item]
             else:
