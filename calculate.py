@@ -290,6 +290,9 @@ class Calculator():
                     else:
                         duplicates = False
 
+                # Add a * before brackets that contain a number before them
+                current_text = self.brackets_conversion(current_text)
+
                 while "√" in current_text:
                     current_text = self.nth_root_conversion(current_text)
                 
@@ -484,6 +487,26 @@ class Calculator():
         
         current_text = "".join(current_text_list)
         current_text = current_text.translate(self.exp_to_normal)
+
+        return current_text
+
+
+    def brackets_conversion(self, current_text):
+        current_text_list = list(current_text)
+        this_value = ""
+        previous_value = ""
+
+        for item in range(len(current_text_list)):
+            this_value = current_text_list[item]
+            if this_value == "(":
+                if previous_value in self.numbers:
+                    current_text_list[item] = "*" + current_text_list[item]
+            else:
+                pass
+
+            previous_value = this_value
+        
+        current_text = "".join(current_text_list)
 
         return current_text
     
