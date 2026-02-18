@@ -15,7 +15,15 @@ It opens up a menu to select from:
 
 ### calculate.py
 This file is for the 'Calculator' screen.  
-The code in here manages the GUI and logic for calculations.
+The code in here manages the GUI and logic for calculations.  
+The user is able to do:  
+- Simple Arithmetic
+- Trigonometry
+- Exponentiation and rooting
+- Logarithms
+- Factorials
+- Reciprocation / +- current value on the display
+- Use constants e and pi
 
 ### graphs.py
 This file is for the 'Graphing tool' screen.  

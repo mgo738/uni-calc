@@ -1,12 +1,27 @@
 import tkinter as tk
+import math
 
 class Calculator():
     def __init__(self, master):
         self.master = master
         self.last_pressed_equals = False
+        self.select_exponent = False
+        self.nth_root = False
+        self.nth_power = False
+
         self.numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."]
-        self.operators = ["+", "-", "x", "÷"]
-        self.more = ["%", "(", ")", "x²", "xⁿ", "x!", "1/x", "√x", "ⁿ√x", "sin", "cos", "tan", "π", "log", "ln", "e"]
+        self.more = ["(", ")", "π", "e"]
+        self.operators = ["+", "-", "x", "÷", "%"]
+        self.special_operators = ["sin", "cos", "tan", "log", "ln"]
+        self.roots = ["ⁿ√x", "√x"]
+        self.other = ["x!", "x²", "xⁿ"]
+        self.change_value = ["±", "⅟x"]
+        self.exponent_values = ["⁰", "¹", "²", "³", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹"]
+
+        self.normal_to_exp = str.maketrans("0123456789", "⁰¹²³⁴⁵⁶⁷⁸⁹")
+        self.exp_to_normal = str.maketrans("⁰¹²³⁴⁵⁶⁷⁸⁹", "0123456789")
+        self.exponent_value_to_put = ""
+        self.saved_text_for_exponent = ""
 
     def show(self):
         self.master.title("Calculator Screen")
@@ -26,7 +41,7 @@ class Calculator():
         self.previous_text_label = tk.Label(self.text_frame, text="",
                                            font=("Georgia", 18), bg="white", fg="#555555")
         
-        # Number buttons
+        # Number buttons 
         self.button_0 = tk.Button(self.button_frame, text="0", font=("Georgia", 26), 
                                   borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
                                   command=lambda: self.button_functions(self.button_0))
@@ -90,7 +105,7 @@ class Calculator():
                                         borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
                                         command=lambda: self.button_functions(self.button_decimal))
 
-        #More buttons
+        # More buttons
         self.button_back = tk.Button(self.more_button_frame, text="Back", font=("Georgia", 26),
                                      borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
                                      command=lambda: self.button_functions(self.button_back))
@@ -101,37 +116,53 @@ class Calculator():
                                                borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
                                                command=lambda: self.button_functions(self.button_backspace_more))
         self.button_percent = tk.Button(self.more_button_frame, text="%", font=("Georgia", 26),
-                                        borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
-        self.button_open_brackert = tk.Button(self.more_button_frame, text="(", font=("Georgia", 26),
-                                              borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                        borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                        command=lambda: self.button_functions(self.button_percent))
+        self.button_open_bracket = tk.Button(self.more_button_frame, text="(", font=("Georgia", 26),
+                                              borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                              command=lambda: self.button_functions(self.button_open_bracket))
         self.button_close_bracket = tk.Button(self.more_button_frame, text=")", font=("Georgia", 26),
-                                              borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                              borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                              command=lambda: self.button_functions(self.button_close_bracket))
         self.button_square = tk.Button(self.more_button_frame, text="x²", font=("Georgia", 26),
-                                       borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                       borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                       command=lambda: self.button_functions(self.button_square))
         self.button_raise_to_n = tk.Button(self.more_button_frame, text="xⁿ", font=("Georgia", 26),
-                                           borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                           borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                           command=lambda: self.button_functions(self.button_raise_to_n))
         self.button_factorial = tk.Button(self.more_button_frame, text="x!", font=("Georgia", 26),
-                                          borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
-        self.button_reciprocal = tk.Button(self.more_button_frame, text="1/x", font=("Georgia", 26),
-                                           borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                          borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                          command=lambda: self.button_functions(self.button_factorial))
+        self.button_reciprocal = tk.Button(self.more_button_frame, text="⅟x", font=("Georgia", 26),
+                                           borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                           command=lambda: self.button_functions(self.button_reciprocal))
         self.button_square_root = tk.Button(self.more_button_frame, text="√x", font=("Georgia", 26),
-                                            borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                            borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                            command=lambda: self.button_functions(self.button_square_root))
         self.button_nth_root = tk.Button(self.more_button_frame, text="ⁿ√x", font=("Georgia", 26),
-                                         borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                         borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                         command=lambda: self.button_functions(self.button_nth_root))
         self.button_sin = tk.Button(self.more_button_frame, text="sin", font=("Georgia", 26),
-                                    borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                    borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                    command=lambda: self.button_functions(self.button_sin))
         self.button_cos = tk.Button(self.more_button_frame, text="cos", font=("Georgia", 26),
-                                    borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                    borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                    command=lambda: self.button_functions(self.button_cos))
         self.button_tan = tk.Button(self.more_button_frame, text="tan", font=("Georgia", 26),
-                                    borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                    borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                    command=lambda: self.button_functions(self.button_tan))
         self.button_pi = tk.Button(self.more_button_frame, text="π", font=("Georgia", 26),
-                                   borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                   borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                   command=lambda: self.button_functions(self.button_pi))
         self.button_log = tk.Button(self.more_button_frame, text="log", font=("Georgia", 26),
-                                    borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                    borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                    command=lambda: self.button_functions(self.button_log))
         self.button_ln = tk.Button(self.more_button_frame, text="ln", font=("Georgia", 26),
-                                   borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                   borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                   command=lambda: self.button_functions(self.button_ln))
         self.button_e = tk.Button(self.more_button_frame, text="e", font=("Georgia", 26),
-                                  borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg)
+                                  borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
+                                  command=lambda: self.button_functions(self.button_e))
         self.button_equals_more = tk.Button(self.more_button_frame, text="=", font=("Georgia", 26),
                                             borderwidth=0.5, bg=self.frame_bg, activebackground=self.frame_bg,
                                             command=lambda: self.button_functions(self.button_equals_more))
@@ -194,7 +225,7 @@ class Calculator():
         self.button_c_more.grid(row=0, column=1, sticky="nsew")
         self.button_backspace_more.grid(row=0, column=2, sticky="nsew")
         self.button_percent.grid(row=0, column=3, sticky="nsew")
-        self.button_open_brackert.grid(row=1, column=0, sticky="nsew")
+        self.button_open_bracket.grid(row=1, column=0, sticky="nsew")
         self.button_close_bracket.grid(row=1, column=1, sticky="nsew")
         self.button_square.grid(row=1, column=2, sticky="nsew")
         self.button_raise_to_n.grid(row=1, column=3, sticky="nsew")
@@ -215,22 +246,15 @@ class Calculator():
         self.answer_text_label.pack(side="right", anchor="s", padx=10, pady=10)
         self.previous_text_label.place(relx=0.02, rely=0.75, anchor="sw")
     
+    
     def button_functions(self, button):
         button_text = button.cget("text")
         current_text = self.calc_text_label.cget("text")
         
-        if (button_text in self.numbers) or (button_text in self.operators):
-                if self.last_pressed_equals:
-                    if button_text in self.numbers:
-                        self.previous_text_label.config(text=f"({current_text})")
-                        self.calc_text_label.config(text=button_text)
-                        self.last_pressed_equals = False
-                    else:
-                        self.previous_text_label.config(text=f"({current_text})")
-                        self.calc_text_label.config(text=self.answer_text_label.cget("text") + button_text)
-                        self.last_pressed_equals = False
-                else:
-                    self.calc_text_label.config(text=current_text + button_text)
+        if ((button_text in self.numbers) or (button_text in self.operators)
+            or (button_text in self.more) or (button_text in self.roots) 
+            or (button_text in self.other) or (button_text in self.special_operators)):
+                self.normal_button(button)
         elif button_text == "C":
             self.calc_text_label.config(text="")
             self.last_pressed_equals = False
@@ -238,11 +262,11 @@ class Calculator():
             self.calc_text_label.config(text=current_text[:-1])
             self.last_pressed_equals = False
         elif button_text == "±":
+            self.plus_minus()
             self.last_pressed_equals = False
-            if current_text.startswith("-"):
-                self.calc_text_label.config(text=current_text[1:])
-            else:
-                self.calc_text_label.config(text="-" + current_text)
+        elif button_text == "⅟x":
+            self.reciprocate()
+            self.last_pressed_equals = False
         elif button_text == "More":
             self.button_frame.grid_forget()
             self.more_button_frame.grid(row=2, column=0, sticky="nsew")
@@ -251,24 +275,267 @@ class Calculator():
             self.button_frame.grid(row=2, column=0, sticky="nsew")
         elif button_text == "=":
             self.do_equals()
+        
 
-
-    def do_equals(self):
+    def do_equals(self): # Need to look into brackets and values before special operators (3sinx, 4logx, 5e, 6π etc...)
         current_text = self.calc_text_label.cget("text")
-        try:
-            duplicates = True
-            self.last_pressed_equals = True
+        if not self.select_exponent:
+            try:
+                duplicates = True
+                self.last_pressed_equals = True
+                
+                while duplicates:
+                    if "++" in current_text or "--" in current_text or "xx" in current_text or "÷÷" in current_text:
+                        current_text = current_text.replace("++", "+").replace("--", "+").replace("xx", "x").replace("÷÷", "÷")
+                    else:
+                        duplicates = False
+
+                # Add a * before brackets that contain a number before them
+                current_text = self.multiplication_conversion(current_text, "(")
+
+                while "√" in current_text:
+                    current_text = self.nth_root_conversion(current_text)
+                
+                while "!" in current_text:
+                    current_text = self.factorial_conversion(current_text)
+
+                while any(sub in current_text for sub in self.exponent_values):
+                    current_text = self.exponent_conversion(current_text)
+
+                # Replace some text on calc display to actual things python can work with
+                current_text = current_text.replace("sin", "math.sin").replace("cos", "math.cos").replace("tan", "math.tan")
+                current_text = current_text.replace("log", "math.log10").replace("ln", "math.log")
+                current_text = current_text.replace("%", "*0.01").replace("e", "math.e").replace("π", "math.pi")
+                current_text = current_text.replace("x", "*").replace("÷", "/")
+                current_text = self.multiplication_conversion(current_text, "m")
+
+                result = eval(current_text)
+
+                self.answer_text_label.config(text=str(result))
+            except Exception:
+                self.last_pressed_equals = True
+                self.answer_text_label.config(text="Error")
+        else:
+            current_text = current_text.translate(self.normal_to_exp)
+            self.exponent_value_to_put = current_text
             
-            while duplicates:
-                if "++" in current_text or "--" in current_text or "xx" in current_text or "÷÷" in current_text:
-                    current_text = current_text.replace("++", "+").replace("--", "-").replace("xx", "x").replace("÷÷", "÷")
+            if self.nth_root:
+                if self.last_pressed_equals:
+                    self.calc_text_label.config(text=self.exponent_value_to_put 
+                                                + "√(" + self.answer_text_label.cget("text") + ")")
+                else: 
+                    self.calc_text_label.config(text=self.saved_text_for_exponent 
+                                                + self.exponent_value_to_put + "√(")
+
+                self.nth_root = False
+            elif self.nth_power:
+                if self.last_pressed_equals:
+                    self.calc_text_label.config(text=self.answer_text_label.cget("text") 
+                                                + self.exponent_value_to_put)
+                else: 
+                    self.calc_text_label.config(text=self.saved_text_for_exponent 
+                                                + self.exponent_value_to_put)
+                
+                self.nth_power = False
+            
+            self.last_pressed_equals = False
+            self.select_exponent = False
+
+
+    def normal_button(self, button):
+        button_text = button.cget("text")
+        current_text = self.calc_text_label.cget("text")
+        answer_text = self.answer_text_label.cget("text")
+        if self.last_pressed_equals:
+            self.previous_text_label.config(text=f"({current_text})")
+
+            if (button_text in self.numbers) or (button_text in self.more):
+                if self.select_exponent:
+                    self.calc_text_label.config(text=current_text + button_text)
                 else:
-                    duplicates = False
+                    self.calc_text_label.config(text=button_text)
+            elif button_text == "ⁿ√x" or button_text == "xⁿ":
+                self.saved_text_for_exponent = current_text
+                self.calc_text_label.config(text=f"")
+                self.select_exponent = True
 
-            expression = current_text.replace("x", "*").replace("÷", "/")
-            result = eval(expression)
+                if button_text == "ⁿ√x":
+                    self.nth_root = True
+                else: 
+                    self.nth_power = True
+            elif (button_text in self.roots) or (button_text in self.other):
+                text_to_add = button_text.replace("x", "(" + answer_text + ")") 
+                self.calc_text_label.config(text=text_to_add)
+            elif (button_text in self.special_operators):
+                self.calc_text_label.config(text=button_text + "(" + answer_text + ")")
+            else:   
+                self.calc_text_label.config(text=answer_text + button_text)
+                
+            if not self.select_exponent:
+                self.last_pressed_equals = False
+        else:
+            if button_text in self.special_operators:
+                self.calc_text_label.config(text=current_text + button_text + "(")
+            elif (button_text == "ⁿ√x") or (button_text == "xⁿ"):
+                self.saved_text_for_exponent = current_text
+                self.calc_text_label.config(text=f"")
+                self.select_exponent = True
 
-            self.answer_text_label.config(text=str(result))
-        except Exception:
-            self.last_pressed_equals = True
-            self.answer_text_label.config(text="Error")
+                if button_text == "ⁿ√x":
+                    self.nth_root = True
+                else: 
+                    self.nth_power = True
+            elif button_text == "√x":
+                self.calc_text_label.config(text=current_text + "√(")
+            elif button_text in self.other:
+                self.calc_text_label.config(text=current_text + button_text.replace("x", ""))
+            else:
+                self.calc_text_label.config(text=current_text + button_text)
+                self.last_pressed_equals = False
+    
+    
+    def nth_root_conversion(self, current_text):
+        is_super = True
+        current_index = 0
+        root_index = 0
+        exponents = ""
+
+        current_index = current_text.index("√")
+        root_index = current_index
+
+        # Go backwards checking length of the superscript text before the root symbol
+        while is_super:
+            if current_text[current_index-1] in self.exponent_values:
+                exponents += current_text[current_index-1]
+                current_index -= 1
+            else:
+                is_super = False
+            
+        if exponents:
+            exponents = exponents[::-1]
+            exponents = exponents.translate(self.exp_to_normal)
+
+            # Remove the superscript text from string
+            current_text_list = list(current_text)
+            while (current_index < root_index):
+                current_text_list.pop(current_index)
+                root_index -= 1
+            
+            current_text = "".join(current_text_list)
+            current_text = current_text.replace("√", "math.pow", 1)
+
+            # Due to way math.pow works, the exponent is the 2nd param
+            # Looks for closing bracket, then add the exponent before it
+            index_for_power = current_text.find(")", current_index)
+            current_text_list = list(current_text)
+            current_text_list.insert(index_for_power, "," + str(1/int(exponents)))
+            current_text = "".join(current_text_list)
+        else:
+            current_text = current_text.replace("√", "math.sqrt", 1)
+
+        return current_text
+    
+
+    def factorial_conversion(self, current_text):
+        is_number = True
+        numbers_for_factorial = ""
+
+        factorial_index = current_text.index("!")
+        current_index = factorial_index
+
+        while is_number:
+            if current_text[current_index-1] in self.numbers:
+                current_index -= 1
+            elif current_text[current_index-1] == ")":
+                current_index -= 1
+
+                # Gets the expression inside of brackets and evals it before doing factorial on it
+                while current_text[current_index-1] != "(":
+                    numbers_for_factorial += current_text[current_index-1]
+                    current_index -= 1
+                
+                numbers_for_factorial = numbers_for_factorial[::-1]
+                numbers_for_factorial = eval(numbers_for_factorial)
+                is_number = False
+            else:
+                is_number = False
+
+        current_text_list = list(current_text)
+        current_text_list.pop(factorial_index)
+        current_text_list.insert(factorial_index, ")")
+        current_text_list.insert(current_index, "math.factorial(")
+        current_text = "".join(current_text_list)
+
+        return current_text
+
+
+    def exponent_conversion(self, current_text):
+        current_text_list = list(current_text)
+        this_value = ""
+        previous_value = ""
+
+        for item in range(len(current_text_list)):
+            this_value = current_text_list[item]
+            if this_value in self.exponent_values:
+                if previous_value not in self.exponent_values:
+                    current_text_list[item] = "**" + current_text_list[item]
+            else:
+                pass
+
+            previous_value = this_value
+        
+        current_text = "".join(current_text_list)
+        current_text = current_text.translate(self.exp_to_normal)
+
+        return current_text
+
+
+    def multiplication_conversion(self, current_text, case):
+        current_text_list = list(current_text)
+        this_value = ""
+        previous_value = ""
+
+        for item in range(len(current_text_list)):
+            this_value = current_text_list[item]
+            if this_value == case:
+                if previous_value in self.numbers:
+                    current_text_list[item] = "*" + current_text_list[item]
+            else:
+                pass
+
+            previous_value = this_value
+        
+        current_text = "".join(current_text_list)
+
+        return current_text
+    
+
+    def plus_minus(self):
+        if not self.last_pressed_equals:
+            current_text = self.calc_text_label.cget("text")
+            if current_text.startswith("-"):
+                self.calc_text_label.config(text=current_text[1:])
+            else:
+                self.calc_text_label.config(text="-" + current_text)
+        else:
+            answer_text = self.answer_text_label.cget("text") 
+            if answer_text.startswith("-"): 
+                self.calc_text_label.config(text=answer_text[1:]) 
+            else: 
+                self.calc_text_label.config(text="-" + answer_text)
+
+    
+    def reciprocate(self):
+        if self.last_pressed_equals:
+            answer_text = self.answer_text_label.cget("text")
+            self.calc_text_label.config(text="1÷(" + answer_text + ")")
+        else:
+            current_text = self.calc_text_label.cget("text")
+            if current_text.startswith("1÷"):
+                self.calc_text_label.config(text=current_text[2:].strip("()"))
+            else:
+                terms = current_text.split("÷", 1)
+                if len(terms) == 1:
+                    self.calc_text_label.config(text="1÷(" + current_text + ")")
+                else:
+                    self.calc_text_label.config(text=f'({terms[1].strip("()")})' + "÷" + terms[0].strip("()"))
