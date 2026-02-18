@@ -12,10 +12,11 @@ class Calculator():
         self.numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."]
         self.more = ["(", ")", "π", "e"]
         self.operators = ["+", "-", "x", "÷", "%"]
-        self.special_operators = ["sin", "cos", "tan","log", "ln"]
+        self.special_operators = ["sin", "cos", "tan", "log", "ln"]
         self.roots = ["ⁿ√x", "√x"]
         self.other = ["x!", "x²", "xⁿ"]
         self.change_value = ["±", "⅟x"]
+        self.exponent_values = ["⁰", "¹", "²", "³", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹"]
 
         self.normal_to_exp = str.maketrans("0123456789", "⁰¹²³⁴⁵⁶⁷⁸⁹")
         self.exp_to_normal = str.maketrans("⁰¹²³⁴⁵⁶⁷⁸⁹", "0123456789")
@@ -276,7 +277,7 @@ class Calculator():
             self.do_equals()
         
 
-    def do_equals(self): # Need to look into factorial, nth root and powers
+    def do_equals(self): # Need to look into exponentiation and brackets - 2(20)
         current_text = self.calc_text_label.cget("text")
         if not self.select_exponent:
             try:
@@ -294,6 +295,9 @@ class Calculator():
                 
                 while "!" in current_text:
                     current_text = self.factorial_conversion(current_text)
+
+                while any(sub in current_text for sub in self.exponent_values):
+                    current_text = self.exponent_conversion(current_text)
 
                 # Replace some text on calc display to actual things python can work with
                 current_text = current_text.replace("sin", "math.sin").replace("cos", "math.cos").replace("tan", "math.tan")
@@ -396,7 +400,7 @@ class Calculator():
         root_index = current_index
 
         while is_super:
-            if current_text[current_index-1] in "⁰¹²³⁴⁵⁶⁷⁸⁹":
+            if current_text[current_index-1] in self.exponent_values:
                 exponents += current_text[current_index-1]
                 current_index -= 1
             else:
@@ -454,6 +458,11 @@ class Calculator():
         current_text_list.insert(factorial_index, ")")
         current_text_list.insert(current_index, "math.factorial(")
         current_text = "".join(current_text_list)
+
+        return current_text
+
+
+    def exponent_conversion(self, current_text):
 
         return current_text
     
