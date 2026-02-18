@@ -399,6 +399,7 @@ class Calculator():
         current_index = current_text.index("√")
         root_index = current_index
 
+        # Go backwards checking length of the superscript text before the root symbol
         while is_super:
             if current_text[current_index-1] in self.exponent_values:
                 exponents += current_text[current_index-1]
@@ -410,6 +411,7 @@ class Calculator():
             exponents = exponents[::-1]
             exponents = exponents.translate(self.exp_to_normal)
 
+            # Remove the superscript text from string
             current_text_list = list(current_text)
             while (current_index < root_index):
                 current_text_list.pop(current_index)
@@ -418,6 +420,8 @@ class Calculator():
             current_text = "".join(current_text_list)
             current_text = current_text.replace("√", "math.pow", 1)
 
+            # Due to way math.pow works, the exponent is the 2nd param
+            # Looks for closing bracket, then add the exponent before it
             index_for_power = current_text.find(")", current_index)
             current_text_list = list(current_text)
             print(current_text_list)
@@ -443,6 +447,7 @@ class Calculator():
             elif current_text[current_index-1] == ")":
                 current_index -= 1
 
+                # Gets the expression inside of brackets and evals it before doing factorial on it
                 while current_text[current_index-1] != "(":
                     numbers_for_factorial += current_text[current_index-1]
                     current_index -= 1
@@ -464,12 +469,18 @@ class Calculator():
 
     def exponent_conversion(self, current_text):
         current_text_list = list(current_text)
+        this_value = ""
+        previous_value = ""
 
         for item in range(len(current_text_list)):
-            if current_text_list[item] in self.exponent_values:
-                current_text_list[item] = "**" + current_text_list[item]
+            this_value = current_text_list[item]
+            if this_value in self.exponent_values:
+                if previous_value not in self.exponent_values:
+                    current_text_list[item] = "**" + current_text_list[item]
             else:
                 pass
+
+            previous_value = this_value
         
         current_text = "".join(current_text_list)
         current_text = current_text.translate(self.exp_to_normal)
