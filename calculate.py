@@ -277,7 +277,7 @@ class Calculator():
             self.do_equals()
         
 
-    def do_equals(self): # Need to look into exponentiation and brackets - 2(20)
+    def do_equals(self): # Need to look into brackets and values before special operators (3sinx, 4logx, 5e, 6π etc...)
         current_text = self.calc_text_label.cget("text")
         if not self.select_exponent:
             try:
@@ -463,6 +463,16 @@ class Calculator():
 
 
     def exponent_conversion(self, current_text):
+        current_text_list = list(current_text)
+
+        for item in range(len(current_text_list)):
+            if current_text_list[item] in self.exponent_values:
+                current_text_list[item] = "**" + current_text_list[item]
+            else:
+                pass
+        
+        current_text = "".join(current_text_list)
+        current_text = current_text.translate(self.exp_to_normal)
 
         return current_text
     
