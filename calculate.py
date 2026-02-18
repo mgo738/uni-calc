@@ -22,6 +22,7 @@ class Calculator():
         self.exp_to_normal = str.maketrans("⁰¹²³⁴⁵⁶⁷⁸⁹", "0123456789")
         self.exponent_value_to_put = ""
         self.saved_text_for_exponent = ""
+        self.saved_previous_text = ""
 
     def show(self):
         self.master.title("Calculator Screen")
@@ -340,6 +341,7 @@ class Calculator():
             
             self.last_pressed_equals = False
             self.select_exponent = False
+            self.previous_text_label.config(text=self.saved_previous_text)
 
 
     def normal_button(self, button):
@@ -356,7 +358,10 @@ class Calculator():
                     self.calc_text_label.config(text=button_text)
             elif button_text == "ⁿ√x" or button_text == "xⁿ":
                 self.saved_text_for_exponent = current_text
-                self.calc_text_label.config(text=f"")
+                self.saved_previous_text = self.previous_text_label.cget("text")
+
+                self.calc_text_label.config(text="")
+                self.previous_text_label.config(text="Select exponent:")
                 self.select_exponent = True
 
                 if button_text == "ⁿ√x":
@@ -378,7 +383,10 @@ class Calculator():
                 self.calc_text_label.config(text=current_text + button_text + "(")
             elif (button_text == "ⁿ√x") or (button_text == "xⁿ"):
                 self.saved_text_for_exponent = current_text
-                self.calc_text_label.config(text=f"")
+                self.saved_previous_text = self.previous_text_label.cget("text")
+
+                self.calc_text_label.config(text="")
+                self.previous_text_label.config(text="Select exponent:")
                 self.select_exponent = True
 
                 if button_text == "ⁿ√x":
