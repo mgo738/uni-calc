@@ -15,7 +15,7 @@ class Tables():
         self.entry_frame.pack_propagate(False)
         self.entry_frame.grid()
 
-        self.title_label = tk.Label(self.entry_frame, text="Input file name:", font=("Georgia", 24, "bold"))
+        self.title_label = tk.Label(self.entry_frame, text="Enter full file path:", font=("Georgia", 24, "bold"))
         self.title_label.pack(anchor='n', pady=50)
 
         self.file_entry = tk.Entry(self.entry_frame, width=40)
@@ -27,7 +27,7 @@ class Tables():
                                       command=self.show_table)
         self.entry_button.pack(anchor='n', pady=20)
 
-        self.error_label = tk.Label(self.entry_frame, font=("Georgia", 20, "bold"), fg="#B10A0A", text="")
+        self.error_label = tk.Label(self.entry_frame, font=("Georgia", 18, "bold"), fg="#B10A0A", text="")
         self.error_label.pack(anchor='n', pady=10)
     
     def show_table(self):
@@ -40,3 +40,9 @@ class Tables():
         if not self.user_file.endswith(".csv"):
             self.error_label.config(text="Error: File type must be .csv only")
             return None
+        
+        self.entry_frame.grid_forget()
+
+        self.table_frame = tk.Frame(self.master, width=500, height=730, bg='red')
+        self.table_frame.pack_propagate(False)
+        self.table_frame.grid()
