@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk, filedialog
+from tkinter import filedialog
 import os
 
 class Tables():
@@ -32,10 +32,10 @@ class Tables():
         self.open_button = tk.Button(self.entry_frame, width=10, height=1, bg='white', 
                                       borderwidth=0, text='Open file', font=("Georgia", 14),
                                       command=lambda: self.use_file("open"))
-        self.open_button.pack(anchor='n', pady=20)
+        self.open_button.pack(anchor='n')
 
         self.error_label = tk.Label(self.entry_frame, font=("Georgia", 18, "bold"), fg="#B10A0A", text="")
-        self.error_label.pack(anchor='n', pady=10)
+        self.error_label.pack(anchor='n', pady=20)
     
 
     def use_file(self, use):
@@ -59,8 +59,6 @@ class Tables():
     
 
     def show_table(self):
-        self.entry_frame.grid_forget()
-
-        self.table_frame = tk.Frame(self.master, width=500, height=730, bg='red')
-        self.table_frame.pack_propagate(False)
-        self.table_frame.grid()
+        self.table_window = tk.Toplevel(self.master)
+        self.table_window.geometry("800x500")
+        self.table_window.title("Table")
