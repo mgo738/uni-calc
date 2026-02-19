@@ -1,6 +1,7 @@
 import tkinter as tk
-from tkinter import filedialog
+from tkinter import filedialog, messagebox, ttk
 import os
+import csv
 
 class Tables():
     def __init__(self, master):
@@ -62,3 +63,24 @@ class Tables():
         self.table_window = tk.Toplevel(self.master)
         self.table_window.geometry("800x500")
         self.table_window.title("Table")
+
+        try:
+            with open(self.user_file, 'r') as file:
+                csvReader = csv.reader(file)
+                rows = list(csvReader)
+
+                if not rows:
+                    messagebox.showwarning("Empty File", "The CSV you selected is empty!")
+                
+                self.table_tree = ttk.Treeview(self.table_window)
+                self.table_tree.pack()
+
+                headers = rows[0]
+                self.table_tree["columns"] = headers
+                self.table_tree["show"] = "headings"
+
+                for header in headers:
+                    self.table_tree.heading(header, text=header)
+                    self.table_tree.column(header, width=100, anchor="center")
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to load file:\n{e}")
