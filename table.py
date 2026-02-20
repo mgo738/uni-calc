@@ -118,7 +118,10 @@ class Tables():
         
     
     def calculate_mean(self):
-        self.mean_values=[]
+        self.mean_headers = []
+        self.totals_to_insert = []
+        self.counts_to_insert = []
+        self.means_to_insert = []
         for column_id, column_name in enumerate(self.table_tree["columns"]):
             total = 0
             count = 0
@@ -127,19 +130,29 @@ class Tables():
                     total += float(self.table_tree.item(item)["values"][column_id])
                     count += 1
                 
-                self.mean_values.insert(column_id, [column_name, total, count, round(total/count, 2)])
+                self.mean_headers.insert(column_id, column_name)
+                self.totals_to_insert.insert(column_id, total)
+                self.counts_to_insert.insert(column_id, count)
+                self.means_to_insert.insert(column_id, round(total/count, 2))
             except Exception:
-                self.mean_values.insert(column_id, [column_name, 'N/A', 'N/A', 'N/A'])
+                self.mean_headers.insert(column_id, column_name)
+                self.totals_to_insert.insert(column_id, "N/A")
+                self.counts_to_insert.insert(column_id, "N/A")
+                self.means_to_insert.insert(column_id, "N/A")
+        
+        self.create_mean_window()
 
+
+    def create_mean_window(self):
         self.mean_window = tk.Toplevel(self.table_window)
-        self.mean_window.geometry("800x500")
+        self.mean_window.geometry("500x300")
         self.mean_window.title("Mean values")
 
         self.mean_horizontal_scrollbar = ttk.Scrollbar(self.mean_window, orient="horizontal")
 
         self.mean_tree = ttk.Treeview(self.mean_window, xscrollcommand=self.mean_horizontal_scrollbar.set)
         self.mean_horizontal_scrollbar.config(command=self.mean_tree.xview)
-        self.mean_tree.column('#0', width=50, stretch=False)
+        self.mean_tree.column('#0', width=80, stretch=False)
 
         self.mean_tree.grid(row=0, column=0, sticky='nsew')
         self.mean_horizontal_scrollbar.grid(row=1, column=0, sticky='ew')
@@ -147,14 +160,14 @@ class Tables():
         self.mean_window.rowconfigure(0, weight=1)
         self.mean_window.columnconfigure(0, weight=1)
 
-        mean_headers = []
-        for entry in self.mean_values:
-            mean_headers.append(entry[0])
-
-        self.mean_tree["columns"] = mean_headers
-        for header in mean_headers:
+        self.mean_tree["columns"] = self.mean_headers
+        for header in self.mean_headers:
             self.mean_tree.heading(header, text=header)
             self.mean_tree.column(header, width=100, anchor='center')
+
+        self.mean_tree.insert("", "end", text="Total (Σx):", values=self.totals_to_insert)
+        self.mean_tree.insert("", "end", text="Count (n):", values=self.counts_to_insert)
+        self.mean_tree.insert("", "end", text="Mean (x̄):", values=self.means_to_insert)
 
 
     def calculate_standard_deviation(self):
