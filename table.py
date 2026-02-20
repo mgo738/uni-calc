@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 import os
-import csv
+import pandas as pd
 
 class Tables():
     def __init__(self, master):
@@ -66,8 +66,11 @@ class Tables():
 
         try:
             with open(self.user_file, 'r') as file:
-                csvReader = csv.reader(file)
-                rows = list(csvReader)
+                csvReader = pd.read_csv(file)
+                csvReader = csvReader.dropna()
+
+                head_values = csvReader.columns.tolist()
+                rows = [head_values] + csvReader.values.tolist()
 
                 if not rows:
                     messagebox.showwarning("Empty File", "The CSV you selected is empty!")
@@ -115,7 +118,20 @@ class Tables():
         
     
     def calculate_mean(self):
-        pass
+        self.mean_values={}
+        for column_id, column_name in enumerate(self.table_tree["columns"]):
+            total = 0
+            count = 0
+            try:
+                for item in self.table_tree.get_children():
+                    total += float(self.table_tree.item(item)["values"][column_id])
+                    count += 1
+                
+                self.mean_values[column_name] = total/count
+            except Exception:
+                self.mean_values[column_name] = 'N/A'
+
+        print(self.mean_values)
 
 
     def calculate_standard_deviation(self):
