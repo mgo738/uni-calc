@@ -71,16 +71,30 @@ class Tables():
 
                 if not rows:
                     messagebox.showwarning("Empty File", "The CSV you selected is empty!")
+
+                vertical_scrollbar = ttk.Scrollbar(self.table_window, orient="vertical")
+                horizontal_scrollbar = ttk.Scrollbar(self.table_window, orient="horizontal")
                 
-                self.table_tree = ttk.Treeview(self.table_window)
-                self.table_tree.pack()
+                self.table_tree = ttk.Treeview(self.table_window, height=20, xscrollcommand=horizontal_scrollbar.set, yscrollcommand=vertical_scrollbar.set)
+                horizontal_scrollbar.config(command=self.table_tree.xview)
+                vertical_scrollbar.config(command=self.table_tree.yview)
+
+                self.table_tree.grid(row=0, column=0, sticky="nsew")
+                vertical_scrollbar.grid(row=0, column=1, sticky="ns")
+                horizontal_scrollbar.grid(row=1, column=0, sticky="ew")
+
+                self.table_window.rowconfigure(0, weight=1)
+                self.table_window.columnconfigure(0, weight=1)
 
                 headers = rows[0]
                 self.table_tree["columns"] = headers
-                self.table_tree["show"] = "headings"
+                self.table_tree.column("#0", width=0, stretch=False)
 
                 for header in headers:
                     self.table_tree.heading(header, text=header)
                     self.table_tree.column(header, width=100, anchor="center")
+
+                for row in rows[1:]:
+                    self.table_tree.insert("", "end", values=row)
         except Exception as e:
             messagebox.showerror("Error", f"Failed to load file:\n{e}")
