@@ -96,5 +96,27 @@ class Tables():
 
                 for row in rows[1:]:
                     self.table_tree.insert("", "end", values=row)
+
+                self.button_frame = tk.Frame(self.table_window, width = 800, height = 50, bg="#5eee5e")
+                self.button_frame.pack_propagate(False)
+                self.button_frame.grid(row=2, column=0, rowspan=2, sticky="nsew")
+
+                self.mean_button = tk.Button(self.button_frame, text="Calculate mean values", 
+                                             bg='white', borderwidth=0, font=("Georgia", 10, "bold"),
+                                             command=self.calculate_mean)
+                self.sd_button = tk.Button(self.button_frame, text="Calculate Standard Deviation", 
+                                           bg='white', borderwidth=0, font=("Georgia", 10, "bold"),
+                                           command=self.calculate_standard_deviation)
+
+                self.mean_button.pack(side='left', padx=20)
+                self.sd_button.pack(side='left')
         except Exception as e:
             messagebox.showerror("Error", f"Failed to load file:\n{e}")
+        
+    
+    def calculate_mean(self):
+        pass
+
+
+    def calculate_standard_deviation(self):
+        pass
