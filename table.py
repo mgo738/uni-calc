@@ -274,7 +274,14 @@ class Tables():
 
 
     def export_file(self):
-        print("File Exported!")
+        filedialog.asksaveasfilename(
+            title="Export file",
+            defaultextension=".csv",
+            filetypes=[("CSV Files", "*.csv")],
+            initialfile=self.user_file.split("/")[-1]
+        )
+
+        self.table_window.destroy()
 
 
     def save_file(self):
