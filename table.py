@@ -82,6 +82,7 @@ class Tables():
                 self.table_tree = ttk.Treeview(self.table_window, height=20, xscrollcommand=horizontal_scrollbar.set, yscrollcommand=vertical_scrollbar.set)
                 horizontal_scrollbar.config(command=self.table_tree.xview)
                 vertical_scrollbar.config(command=self.table_tree.yview)
+                self.table_tree.bind("<Double-1>", self.on_double_click)
 
                 self.table_tree.grid(row=0, column=0, sticky="nsew")
                 vertical_scrollbar.grid(row=0, column=1, sticky="ns")
@@ -223,3 +224,25 @@ class Tables():
         self.sd_tree.insert("", "end", text="Mean (x̄):", values=self.means_to_insert)
         self.sd_tree.insert("", "end", text="Sum of Squares (Σx²):", values=self.square_means_to_insert)
         self.sd_tree.insert("", "end", text="Standard Deviation (σ):", values=self.standard_devs_to_insert)
+
+    
+    def on_double_click(self, event):
+        click_region = self.table_tree.identify_region(event.x, event.y)
+
+        if click_region != "cell":
+            return
+        
+        click_row = self.table_tree.identify_row(event.y)
+        click_column = self.table_tree.identify_column(event.x)
+        x_position, y_position, entry_width, entry_height = self.table_tree.bbox(click_row, click_column)
+
+        if not click_row or not click_column:
+            return
+        
+        click_column = int(click_column.replace("#", "")) - 1
+        current_value = self.table_tree.item(click_row, "values")[click_column]
+
+        value_editor = tk.Entry(self.table_window, justify='center')
+        value_editor.place(x=x_position, y=y_position, width=entry_width, height=entry_height)
+        value_editor.insert(0, current_value)
+        value_editor.focus()
