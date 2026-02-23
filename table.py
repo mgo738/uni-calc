@@ -3,6 +3,7 @@ from tkinter import filedialog, messagebox, ttk
 import os
 import pandas as pd
 import math
+import csv
 
 class Tables():
     def __init__(self, master):
@@ -274,15 +275,45 @@ class Tables():
 
 
     def export_file(self):
-        filedialog.asksaveasfilename(
-            title="Export file",
-            defaultextension=".csv",
-            filetypes=[("CSV Files", "*.csv")],
-            initialfile=self.user_file.split("/")[-1]
-        )
+        try:
+            saveas_file = filedialog.asksaveasfilename(
+                title="Export file",
+                defaultextension=".csv",
+                filetypes=[("CSV Files", "*.csv")],
+                initialfile=self.user_file.split("/")[-1]
+            )
 
-        self.table_window.destroy()
+            if not saveas_file:
+                return
+            
+            with open(saveas_file, "w") as file:
+                writer = csv.writer(file)
+
+                headers = [self.table_tree.heading(col)["text"] for col in self.table_tree["columns"]]
+                writer.writerow(headers)
+
+                for row in self.table_tree.get_children():
+                    row_values = self.table_tree.item(row)["values"]
+                    writer.writerow(row_values)
+
+            messagebox.showinfo("Success", f"Data saved to {saveas_file}")
+            self.table_window.destroy()
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to save file:\n{e}")
 
 
     def save_file(self):
-        print("File Saved!")
+        try:
+            with open(self.user_file, "w") as file:
+                writer = csv.writer(file)
+
+                headers = [self.table_tree.heading(col)["text"] for col in self.table_tree["columns"]]
+                writer.writerow(headers)
+
+                for row in self.table_tree.get_children():
+                    row_values = self.table_tree.item(row)["values"]
+                    writer.writerow(row_values)
+
+            messagebox.showinfo("Success", f"Data saved to {self.user_file}")
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to save file:\n{e}")
