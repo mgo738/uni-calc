@@ -10,7 +10,6 @@ Once that is done, run the calc.py file.
 Running this file will start program.  
 It opens up a menu to select from:
 - Calculator
-- Graphing tool
 - Table and Statistis
 
 ### calculate.py
@@ -25,10 +24,14 @@ The user is able to do:
 - Reciprocation / +- current value on the display
 - Use constants e and pi
 
-### graphs.py
-This file is for the 'Graphing tool' screen.  
-INCOMPLETE - ADD LATER
-
 ### table.py
 This file is for the 'Table and Statistics' screen.  
-INCOMPLETE - ADD LATER
+The code here manages the GUI and logic for creating tables for the user to view the data from their CSV files  
+The user is able to:
+- Open file by writing in file path
+- Open file by selecting file from 'open' screen
+- View their CSV file as a table
+- Edit cells of their CSV file individually
+- Calculate the mean value for each column in their CSV file
+- Calculate Standard Deviation for each column in their CSV file
+- Save their file to current file, or save as to a new file.
