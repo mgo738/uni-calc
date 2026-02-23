@@ -2,7 +2,6 @@ import tkinter as tk
 from PIL import Image, ImageTk
 
 import calculate
-import graphs
 import table
 
 
@@ -10,9 +9,6 @@ class CalcMenu:
     def __init__(self):
         self.calc_image = Image.open("pictures/calculate-button.png")
         self.calc_image = self.calc_image.resize((400, 200))
-        
-        self.graph_image = Image.open("pictures/graph-button.png")
-        self.graph_image = self.graph_image.resize((400, 200))
         
         self.table_image = Image.open("pictures/table-button.png")
         self.table_image = self.table_image.resize((400, 200))
@@ -34,7 +30,6 @@ class CalcMenu:
         self.calc_window.geometry(f'+{x}+{y}')
 
         self.table_button_image = ImageTk.PhotoImage(self.table_image)
-        self.graph_button_image = ImageTk.PhotoImage(self.graph_image)
         self.calc_button_image = ImageTk.PhotoImage(self.calc_image)
 
         self.top_label = tk.Label(self.calc_window, text="Choose an option",
@@ -43,14 +38,11 @@ class CalcMenu:
 
         self.calc_button = tk.Button(self.calc_window, image=self.calc_button_image, borderwidth=0,
                                     command=lambda: self.button_commands("calculate"))
-        self.graph_button = tk.Button(self.calc_window, image=self.graph_button_image, borderwidth=0,
-                                     command=lambda: self.button_commands("graph"))
         self.table_button = tk.Button(self.calc_window, image=self.table_button_image, borderwidth=0,
                                      command=lambda: self.button_commands("table"))
         
         
         self.calc_button.pack(expand=True)
-        self.graph_button.pack(expand=True)
         self.table_button.pack(expand=True)
 
         self.calc_window.mainloop()
@@ -92,17 +84,12 @@ class CalcMenu:
 
         self.create_window()
         self.calculator = calculate.Calculator(self.window)
-        self.graphing = graphs.Graphing(self.window)
         self.tables = table.Tables(self.window)
 
         if screen == "calculate":
             self.title_label.config(text="Calculator")
             self.canvas_bg = "#ec5858"
             self.calculator.show()
-        elif screen == "graph":
-            self.title_label.config(text="Graphing Tool")
-            self.canvas_bg = "#5898ec"
-            self.graphing.show()
         elif screen == "table":
             self.title_label.config(text="Table and Statistics")
             self.canvas_bg = "#5eee5e"
