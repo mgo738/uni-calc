@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 import os
 import pandas as pd
+import math
 
 class Tables():
     def __init__(self, master):
@@ -106,10 +107,10 @@ class Tables():
 
                 self.mean_button = tk.Button(self.button_frame, text="Calculate mean values", 
                                              bg='white', borderwidth=0, font=("Georgia", 10, "bold"),
-                                             command=self.calculate_mean)
+                                             command=self.create_mean_window)
                 self.sd_button = tk.Button(self.button_frame, text="Calculate Standard Deviation", 
                                            bg='white', borderwidth=0, font=("Georgia", 10, "bold"),
-                                           command=self.calculate_standard_deviation)
+                                           command=self.create_standard_window)
 
                 self.mean_button.pack(side='left', padx=20)
                 self.sd_button.pack(side='left')
@@ -139,11 +140,34 @@ class Tables():
                 self.totals_to_insert.insert(column_id, "N/A")
                 self.counts_to_insert.insert(column_id, "N/A")
                 self.means_to_insert.insert(column_id, "N/A")
-        
-        self.create_mean_window()
+
+
+    def calculate_standard_deviation(self):
+        self.calculate_mean()
+
+        self.sd_headers = []
+        self.square_means_to_insert = []
+        self.standard_devs_to_insert = []
+        for column_id, column_name in enumerate(self.table_tree["columns"]):
+            total = 0
+            count = 0
+            try:
+                for item in self.table_tree.get_children():
+                    total += float(self.table_tree.item(item)["values"][column_id])
+                    count += 1
+                
+                self.sd_headers.insert(column_id, column_name)
+                self.square_means_to_insert.insert(column_id, round((total**2)/count, 2))
+                self.standard_devs_to_insert.insert(column_id, round(math.sqrt(self.square_means_to_insert[column_id] - (self.means_to_insert[column_id]**2)), 2))
+            except Exception:
+                self.sd_headers.insert(column_id, column_name)
+                self.square_means_to_insert.insert(column_id, "N/A")
+                self.standard_devs_to_insert.insert(column_id, "N/A")
 
 
     def create_mean_window(self):
+        self.calculate_mean()
+
         self.mean_window = tk.Toplevel(self.table_window)
         self.mean_window.geometry("500x300")
         self.mean_window.title("Mean values")
@@ -168,7 +192,34 @@ class Tables():
         self.mean_tree.insert("", "end", text="Total (Σx):", values=self.totals_to_insert)
         self.mean_tree.insert("", "end", text="Count (n):", values=self.counts_to_insert)
         self.mean_tree.insert("", "end", text="Mean (x̄):", values=self.means_to_insert)
+    
 
+    def create_standard_window(self):
+        self.calculate_standard_deviation()
 
-    def calculate_standard_deviation(self):
-        pass
+        self.sd_window = tk.Toplevel(self.table_window)
+        self.sd_window.geometry("600x350")
+        self.sd_window.title("Mean values")
+
+        self.sd_horizontal_scrollbar = ttk.Scrollbar(self.sd_window, orient="horizontal")
+
+        self.sd_tree = ttk.Treeview(self.sd_window, xscrollcommand=self.sd_horizontal_scrollbar.set)
+        self.sd_horizontal_scrollbar.config(command=self.sd_tree.xview)
+        self.sd_tree.column('#0', width=140, stretch=False)
+
+        self.sd_tree.grid(row=0, column=0, sticky='nsew')
+        self.sd_horizontal_scrollbar.grid(row=1, column=0, sticky='ew')
+
+        self.sd_window.rowconfigure(0, weight=1)
+        self.sd_window.columnconfigure(0, weight=1)
+
+        self.sd_tree["columns"] = self.sd_headers
+        for header in self.sd_headers:
+            self.sd_tree.heading(header, text=header)
+            self.sd_tree.column(header, width=100, anchor='center')
+
+        self.sd_tree.insert("", "end", text="Total (Σx):", values=self.totals_to_insert)
+        self.sd_tree.insert("", "end", text="Count (n):", values=self.counts_to_insert)
+        self.sd_tree.insert("", "end", text="Mean (x̄):", values=self.means_to_insert)
+        self.sd_tree.insert("", "end", text="Sum of Squares (Σx²):", values=self.square_means_to_insert)
+        self.sd_tree.insert("", "end", text="Standard Deviation (σ):", values=self.standard_devs_to_insert)
