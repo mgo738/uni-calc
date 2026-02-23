@@ -112,9 +112,17 @@ class Tables():
                 self.sd_button = tk.Button(self.button_frame, text="Calculate Standard Deviation", 
                                            bg='white', borderwidth=0, font=("Georgia", 10, "bold"),
                                            command=self.create_standard_window)
+                self.export_button = tk.Button(self.button_frame, text="Export File", 
+                                           bg='white', borderwidth=0, font=("Georgia", 10, "bold"),
+                                           command=self.export_file)
+                self.save_button = tk.Button(self.button_frame, text="Save File", 
+                                           bg='white', borderwidth=0, font=("Georgia", 10, "bold"),
+                                           command=self.save_file)
 
                 self.mean_button.pack(side='left', padx=20)
                 self.sd_button.pack(side='left')
+                self.export_button.pack(side='right',padx=20)
+                self.save_button.pack(side='right')
         except Exception as e:
             messagebox.showerror("Error", f"Failed to load file:\n{e}")
         
@@ -263,3 +271,11 @@ class Tables():
         self.value_editor.bind("<Return>", lambda e: self.save_changes())
         self.value_editor.bind("<FocusOut>", lambda e: self.save_changes())
         self.value_editor.bind("<Escape>", lambda e: self.cancel_changes())
+
+
+    def export_file(self):
+        print("File Exported!")
+
+
+    def save_file(self):
+        print("File Saved!")
