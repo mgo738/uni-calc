@@ -226,23 +226,40 @@ class Tables():
         self.sd_tree.insert("", "end", text="Standard Deviation (σ):", values=self.standard_devs_to_insert)
 
     
+    def save_changes(self):
+        value_to_change = self.value_editor.get()
+        row_values = list(self.table_tree.item(self.click_row, "values"))
+        row_values[self.click_column] = value_to_change
+
+        self.table_tree.item(self.click_row, values=row_values)
+        self.value_editor.destroy()
+
+
+    def cancel_changes(self):
+        self.value_editor.destroy()
+    
+    
     def on_double_click(self, event):
         click_region = self.table_tree.identify_region(event.x, event.y)
 
         if click_region != "cell":
             return
         
-        click_row = self.table_tree.identify_row(event.y)
-        click_column = self.table_tree.identify_column(event.x)
-        x_position, y_position, entry_width, entry_height = self.table_tree.bbox(click_row, click_column)
+        self.click_row = self.table_tree.identify_row(event.y)
+        self.click_column = self.table_tree.identify_column(event.x)
+        x_position, y_position, entry_width, entry_height = self.table_tree.bbox(self.click_row, self.click_column)
 
-        if not click_row or not click_column:
+        if not self.click_row or not self.click_column:
             return
         
-        click_column = int(click_column.replace("#", "")) - 1
-        current_value = self.table_tree.item(click_row, "values")[click_column]
+        self.click_column = int(self.click_column.replace("#", "")) - 1
+        current_value = self.table_tree.item(self.click_row, "values")[self.click_column]
 
-        value_editor = tk.Entry(self.table_window, justify='center')
-        value_editor.place(x=x_position, y=y_position, width=entry_width, height=entry_height)
-        value_editor.insert(0, current_value)
-        value_editor.focus()
+        self.value_editor = tk.Entry(self.table_window, justify='center')
+        self.value_editor.place(x=x_position, y=y_position, width=entry_width, height=entry_height)
+        self.value_editor.insert(0, current_value)
+        self.value_editor.focus()
+
+        self.value_editor.bind("<Return>", lambda e: self.save_changes())
+        self.value_editor.bind("<FocusOut>", lambda e: self.save_changes())
+        self.value_editor.bind("<Escape>", lambda e: self.cancel_changes())
