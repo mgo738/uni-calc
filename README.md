@@ -1,7 +1,8 @@
 # Programming Foundations Assignment 2
 
 ## How to run
-To run the calculator program, make sure all python files are in the same directory, and the pictures directory is also available.  
+To run the calculator program, make sure all python files are in the same directory, and the pictures directory is also available.
+If PIL library isn't installed, make sure to install it: pip install pillow
 Once that is done, run the calc.py file.  
 
 ## Contents of repo
